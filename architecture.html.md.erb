@@ -1,0 +1,32 @@
+---
+title: CredHub Deployment Architecture
+owner: CredHub
+---
+
+# Deployment Architecture
+
+CredHub consists of two primary architectures. You can choose either depending on your requirements. The architecture options are: 
+
+* Co-located on a customer VM, or 
+* as an independently deployed and managed service.
+
+## Co-located on a VM
+
+The config server implementation of the BOSH Director uses the co-location architecture. This is appropriate for this application, given its single instance and unique bootstrap problem of deploying itself as the first VM in an environment.
+
+This architecture benefits from low latency and simplicity for a single consumer. If you require high availability or anticipate many consumers, this configuration is not appropriate.
+
+For more information about deploying CredHub with BOSH, read [Setting Up and Deploying CredHub with BOSH](./setup-credhub-bosh.html).
+
+<image>
+
+<!--
+## Deployed as a Service
+
+You can also deploy CredHub as an independent service on one or more VMs. The application does not hold state, so you can scale it to multiple instances that share a common database cluster and encryption provider.
+
+This architecture benefits from high availability and scale. However, the additional cost and complexity may not be suitable for a single or small number of consumers. 
+
+LINK TO DOC
+
+<image> -->

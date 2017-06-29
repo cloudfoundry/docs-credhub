@@ -1,0 +1,70 @@
+---
+title: Backing Up and Restoring CredHub Instances
+owner: CredHub
+---
+
+CredHub does not store any stateful data. However, CredHub relies on components that do store stateful data.
+
+If you use CredHub in production or a similar environment that needs resiliency, you should create backups regularly so you can recover in the event of a component failure.  
+
+## Components to Back Up
+
+* <a href="#deployment-manifest">Deployment Manifest</a>
+* <a href="#encryption-keys">Encryption Keys</a>
+* <a href="#database">Database</a>
+
+## <a name="deployment-manifest"></a>Back Up the Deployment Manifest
+
+Back up the CredHub deployment manifest every time you revise it. You may want to keep the backups in a revision control system so you can manage them automatically. 
+
+To download the most recent version of your CredHub deployment manifest, run the following command:
+
+<pre class="terminal">
+$ bosh download manifest DEPLOYMENT-NAME [FILE-PATH]
+</pre>
+
+## <a name="encryption-keys"></a>Backing Up the Encryption Keys
+
+The process for backing up CredHub encryption keys differs based on the encryption provider you use. CredHub supports internal providers and Luna HSM.
+
+### Internal
+
+The internal provider performs encryption and decryption operations using a symmetrical AES key. This key is a hexadecimal value provided to the application during deployment. 
+
+Store the key in a secure place so you can use it in a future recovery deployment. 
+
+### Luna HSM
+
+Luna Hardware Security Modules (HSMs) do not support traditional data export. HSMs are designed not to release key material once it is placed on the device. 
+
+This does not mean data lost from a Luna HSM is unrecoverable. You can configure your deployment to ensure that no data is lost if an HSM fails. 
+
+If you use a Luna HSM to store sensitive data, you can ensure data resiliency by:
+
+* Setting up a redundant HSM configuration, or 
+* Managing a [Luna Backup HSM](https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/safenet-network-hsm/) device. 
+
+CredHub supports management and integration with a high availability (HA) Luna HSM cluster. If you use this configuration, multiple HSMs use mirrored partitions to process incoming requests. Each HSM contains a copy of the encryption key. This provides redundancy, ensuring that all but one of your HSMs could fail without the losing the availability of key material. 
+
+If you us an Luna HSM from AWS, you can also refer to their [reference documentation](http://docs.aws.amazon.com/cloudhsm/latest/userguide/configuring-ha.html) on HA and backup. 
+
+### Frequency
+Back up the encryption keys whenever you rotate them to ensure that you always have access to the latest value. 
+
+Keep an archive of the encryption key values for each CredHub database backup you make. For example, if you maintain backups of the five most recent versions of your CredHub database, also save the five most recent encryption keys so you can access each backup.
+
+## <a name="database"></a>Back Up the Database
+CredHub stores the majority of its stateful data in the configured database. This database is not deployed or managed by CredHub, so backup procedures differ based on the selected database provider. 
+
+<p class='note'><strong>Note</strong>: After rotating the encryption key, test and verify a backup with the latest encryption key. This testing ensures that you are not locked out of your backups in the event of a rollback or other data loss.</p>
+
+<%= vars.credhub_mysql_bbr_recommend %>
+
+See the following topics for more information about database backups:
+
+* [MySQL](http://dev.mysql.com/doc/refman/5.7/en/backup-and-recovery.html)
+* [Postgres](https://www.postgresql.org/docs/9.5/static/backup.html)
+
+### Frequency
+
+Database best practices dictate that you perform backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.

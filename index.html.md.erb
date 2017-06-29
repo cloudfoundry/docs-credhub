@@ -1,0 +1,93 @@
+---
+title: CredHub
+owner: CredHub
+---
+
+
+## <a id="overview"></a>Overview
+
+CredHub is a component designed for centralized credential management in <%= vars.first_product_name %>. It is a single component that can address several scenarios in the <%= vars.product_name %> ecosystem. At the highest level, CredHub centralizes and secures credential generation, storage, lifecycle management, and access.
+
+## <a id="what-can-it-do"></a>What can CredHub do?
+
+CredHub performs a number of different functions to help generate and protect the credentials in your <%= vars.product_name %> deployment, including:
+
+* Securing data for storage
+* Authentication
+* Authorization
+* Access and change logging
+* Data typing
+* Credential generation
+* Credential metadata
+* Credential versioning
+
+## <a id="application-architecture"></a>Application Architecture
+CredHub consists of a REST API and a CLI. The REST API conforms to the Config Server API spec. CredHub is an OAuth2 resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation capabilities. 
+
+![Basic Architecture](images/basic-architecture.png) 
+
+For more information, read <a href="./architecture.html" class="subnav">Architecture</a>.
+
+## <a id="deployment-architecture"></a>Deployment Architecture
+
+The two primary architectures for CredHub are co-located on a consumer VM or an independently deployed and managed service.
+
+### Deploying CredHub with BOSH
+
+The config server implementation of the BOSH Director uses the co-location architecture. This is appropriate for this application, given its single instance and unique bootstrap problem of deploying itself as the first VM in an environment.
+
+![Bosh Deployment](images/bosh-deployment.png) 
+
+This architecture benefits from low latency and simplicity for a single consumer. This configuration is not appropriate where many consumers exist or high availability is required. 
+
+For more information, read <a href="./setup-credhub-bosh.html" class="subnav">Setting Up and Deploying CredHub with BOSH</a>.
+
+## <a id="cred-types"></a>CredHub Credential Types
+
+Credentials exist in multiple places in the <%= vars.product_name %> ecosystem. <%= vars.product_name %> components use credentials to authenticate connections between components. <%= vars.product_name %> installations often have hundreds of active credentials. Leaked credentials are common causes of data and security breaches, so managing them securely is very important. 
+
+For more information, read <a href="./credential-types.html" class="subnav">CredHub Credential Types</a>.
+
+## <a id="credential-names"></a>Creating New Variables
+
+To use CredHub in your deployment, you must create new variables and store them in CredHub. By default, variable namespaces are written to prevent collision across deployments, but you can type variable names precisely if you wish.
+
+For more information, read <a href="./creating-new-variables.html" class="subnav">Creating New Variables in CredHub</a>.
+
+## <a id="api-variables"></a>Fetching Variable Names and Values
+
+API endpoints are available to help you find variable names and values for products known to the Ops Manager Director. 
+
+For more information, read <a href="./credhub-api-variables.html" class="subnav">Fetching Variable Names and Values</a>.
+
+## <a id="backup-restore"></a>Backing Up and Restoring CredHub Instances
+
+The CredHub application does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help prevent data loss if an individual component fails. For more information, read <a href="./backup-restore.html" class="subnav">Backing Up and Restoring CredHub Instances</a>.
+
+<!-- 
+CredHub can also be deployed as an independent service on one or more VMs. The application does not hold state, so it may be scaled to multiple instances that share a common database cluster and encryption provider.
+
+This architecture benefits from high availability and scale, however, the additional cost and complexity may not be suitable for a single or small number of consumers. 
+
+For more information, read <a href="./setup-credhub-service-creds.html" class="subnav">Setting Up and Deploying CredHub with Service Credentials</a>. 
+
+## Troubleshooting
+
+If something goes wrong, CredHub should provide descriptive errors. In many cases, the error will provide insight into the how to resolve the issue. For complex errors, you may need to review the application logs to locate the source of the issue. 
+
+For more information, read <a href="./troubleshooting-credhub.html" class="subnav">Troubleshooting CredHub</a>.
+
+## Hardware Security Modules
+
+CredHub includes support for utilizing Luna HSMs for encryption operations. When configured to use this provider, all encryption and decryption operations are performed by the HSM. CredHub supports a high availability HSM configuration to preserve uptime and key material in the event of a hardware failure. Because the encryption key on an HSM cannot be extracted for backup, you must take extra care to configure an HSM deployment with redundancy to protect your data. 
+
+For more information, read <a href="./hsm-config.html" class="subnav">Configuring a Hardware Security Module</a>.
+
+
+## Migrating Existing Credentials to CredHub
+
+In some cases, you can migrate credentials that already exist in your deployment into CredHub. 
+
+For more information, read <a href="./migrating-credentials.html" class="subnav">Migrating Existing Credentials to CredHub.</a>
+
+-->
