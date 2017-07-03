@@ -3,13 +3,11 @@ title: Using Hardware Security Modules with CredHub
 owner: CredHub
 ---
 
-This topic shows you how to create new AWS CloudHSM devices and configure them to work with CredHub. 
+This topic shows you how to configure [AWS CloudHSM](https://aws.amazon.com/cloudhsm) devices to work with CredHub. 
 
-<p class="note"><strong>Note</strong>: If you use a Luna SafeNet HSM, rather than AWS, skip over the device allocation portion and start by <a href="#initialize-and-configure">initializing and configuring your HSMs</a>.</p>
+<p class="note"><strong>Note</strong>: If you use a <a href="https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/safenet-network-hsm/">Luna SafeNet HSM</a>, rather than AWS, skip over the device allocation portion and start by <a href="#initialize-and-configure">initializing and configuring your HSMs</a>.</p>
 
-If you store critical data in CredHub, Pivotal recommends that you configure at least two HSMs. Appropriately configured HSMs allow key replication, providing redundancy and security in the event of an HSM failure. 
-
-If you choose to run a single HSM, your CredHub data will not be accessible in the event of a device failure. 
+If you store critical data in CredHub, configuring at least two Hardware Security Modules (HSMs) replicates your keys and provides redundancy and security in the event of an HSM failure. With a single HSM, device failure renders your CredHub data inaccessible.
 
 ## Preparation Checklist
 
@@ -220,7 +218,7 @@ If you're only planning to run one CredHub instance, it's possible to register a
 
 Set which key used for encryption operations by defining the encryption key name in the deploy manifest. By default, a key that exists on the HSM is used for encryption operations. If a key does not exist on the HSM, CredHub creates it automatically in the referenced partition. 
 
-When you generate a new key, Pivotal recommends that you review the list of keys on each HSM to validate that key replication is occurring. If new keys do not propagate among the HSMs, you could get locked out of HSMs. 
+When you generate a new key, review the list of keys on each HSM to validate that key replication is occurring. If new keys do not propagate among the HSMs, you could get locked out of HSMs. 
 
 To review stored keys on a partition:
 

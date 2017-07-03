@@ -24,7 +24,12 @@ CredHub uses UAA for user and client authentication. You need a UAA server confi
 To optimize fault tolerance, store CredHub data in an external database. To do so, you must create a database and user on your database server before deployment. You can use the internal Director database to store CredHub data, but take care to avoid data loss when you provision or update the Director VM.
 
 1. **(Optional)** Configure a Luna HSM.<br/>
-If you follow Pivotal's recommended configuration, you use an external Hardware Security Module (HSM) to perform cryptographic operations. Configure the HSM to allow access from the deployed CredHub instance, and grant the operator all of the required permissions. For more information about the required HSM values and how to configure an HSM, read about [configuring a Luna HSM](./hsm-config.html).
+If you use an external Hardware Security Module (HSM) to perform cryptographic operations:
+
+  * Configure the HSM to allow access from the deployed CredHub instance, and
+  * Grant the operator all of the required permissions to use the HSM.
+
+  For more information about the required HSM values and how to configure an HSM, read about [configuring a Luna HSM](./hsm-config.html).
 
 ## <a id="configure"></a> Configuring the Director
 <ol>
