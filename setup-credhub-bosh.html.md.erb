@@ -2,9 +2,9 @@
 title: Setting Up and Deploying CredHub with BOSH
 owner: CredHub
 ---
-This topic provides details about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployments manifests. 
+This topic provides details about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests. 
 
-If you use [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment) to deploy your Ops Manager Director, include the ops file `credhub.yml` to enable CredHub on the Ops Manager Director. 
+If you use [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment), include the file `credhub.yml` to enable CredHub on the BOSH Director VM. 
 
 ## <a id="how-it-works"></a> How It Works
 
@@ -14,8 +14,8 @@ Once configured, any variable in a BOSH deployment manifest with the syntax <cod
 
 ## <a id="setup"></a> Setup Before Deployment
 
-1. Set up an Ops Manager Director.<br/>
-The following configuration steps assume that you have an existing Ops Manager Director. If you do not have a Director, read the [initialization guide](https://bosh.io/docs/init.html) for more details.
+1. Set up BOSH Director.<br/>
+The following configuration steps assume that you have an existing BOSH Director. If you do not have a Director, read the [initialization guide](https://bosh.io/docs/init.html) for more details.
 
 1. Configure UAA on your Director.<br/>
 CredHub uses UAA for user and client authentication. You need a UAA server configured on the Director to enable CredHub. For more information about provisioning UAA on the Director, read [the BOSH documentation](https://bosh.io/docs/director-users-uaa.html).
@@ -35,8 +35,7 @@ If you use an external Hardware Security Module (HSM) to perform cryptographic o
 <ol>
 <li>Update the deployment manifest to include the CredHub release. <a href="https://bosh.io/releases/github.com/pivotal-cf/credhub-release?all=1">Download the latest CredHub release from bosh.io</a>.</li>
 
-<pre class="terminal">
-yaml
+<pre>
     releases:
     - name: bosh
       url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=261.2
@@ -51,8 +50,7 @@ yaml
 
 <li>Add the CredHub job to the Director instance.</li>
 
-<pre class="terminal">
-yaml
+<pre>
     instance_groups:
     - name: bosh
       instances: 1
@@ -73,8 +71,7 @@ yaml
 
 You can generate values that CredHub requires automatically with the <a href="https://github.com/cloudfoundry/bosh-cli">BOSH v2 CLI</a>. To enable generation, add the variable specifications to the manifest as shown below. You can adjust or remove these if you prefer to provide your own values.
 </li>
-<pre class="terminal">
-yaml
+<pre>
     variables: 
     - name: credhub-ca
       type: certificate
@@ -95,8 +92,7 @@ yaml
 
 <li>Add CredHub properties to the deployment manifest.
 
-<pre class="terminal">
-yaml
+<pre>
     properties:
       credhub:
         port: 8844
@@ -161,8 +157,7 @@ The example above includes a configuration to use a hardware security module (HS
 
 This method derives a 256-bit key from the provided encryption password and utilized AES256-GCM encryption.  
 
-<pre class="terminal">
-yml
+<pre>
     ...
       encryption:
         providers: 
@@ -179,8 +174,7 @@ For the full list of CredHub properties and default values, read the <a href="ht
 </li>
 <li>Add CredHub CLI and Director/CredHub UAA clients.</li>
 
-<pre class="terminal">
-yaml
+<pre>
     properties:
       uaa:
         clients:
@@ -203,8 +197,7 @@ yaml
 
 <li>Enable the config server on the Director and configure it to utilize CredHub.</li>
 
-<pre class="terminal">
-yaml
+<pre>
     properties:
       director:
         address: bosh.EXAMPLE.com
@@ -233,8 +226,7 @@ yaml
 
 If you are using the internal Director database, you must provision an additional database for the CredHub data. If you use an external database, you must create the database on your database server before deploying.
 </li>
-<pre class="terminal">
-yaml
+<pre>
     properties:
       postgres: &db
         host: 127.0.0.1
@@ -248,8 +240,7 @@ yaml
 
 <li><strong>(Optional)</strong> Seed initial CredHub users to UAA.</li>
 
-<pre class="terminal">
-yaml
+<pre>
     properties:
       uaa:
         scim:
@@ -315,8 +306,7 @@ Once you have a Director that integrates with CredHub, you can update your deplo
 
 Define credentials that you want to be generated automatically in the <code>variables</code> section. 
 </li>
-<pre class="terminal">
-    yaml 
+<pre> 
     name: Sample-Manifest</br>
     releases:
     - name: shell

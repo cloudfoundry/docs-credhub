@@ -26,8 +26,6 @@ CredHub consists of a REST API and a CLI. The REST API conforms to the Config Se
 
 ![Basic Architecture](images/basic-architecture.png) 
 
-For more information, read <a href="./architecture.html" class="subnav">Architecture</a>.
-
 ## <a id="deployment-architecture"></a>Deployment Architecture
 
 The two primary architectures for CredHub are co-located on a consumer VM or an independently deployed and managed service.
@@ -42,23 +40,24 @@ This architecture benefits from low latency and simplicity for a single consumer
 
 For more information, read <a href="./setup-credhub-bosh.html" class="subnav">Setting Up and Deploying CredHub with BOSH</a>.
 
+<!--
+## Deployed as a Service
+
+You can also deploy CredHub as an independent service on one or more VMs. The application does not hold state, so you can scale it to multiple instances that share a common database cluster and encryption provider.
+
+This architecture benefits from high availability and scale. However, the additional cost and complexity may not be suitable for a single or small number of consumers. 
+
+LINK TO DOC
+
+IMAGE
+
+-->
+
 ## <a id="cred-types"></a>CredHub Credential Types
 
 Credentials exist in multiple places in the <%= vars.product_name %> ecosystem. <%= vars.product_name %> components use credentials to authenticate connections between components. <%= vars.product_name %> installations often have hundreds of active credentials. Leaked credentials are common causes of data and security breaches, so managing them securely is very important. 
 
 For more information, read <a href="./credential-types.html" class="subnav">CredHub Credential Types</a>.
-
-## <a id="credential-names"></a>Creating New Variables
-
-To use CredHub in your deployment, you must create new variables and store them in CredHub. By default, variable namespaces are written to prevent collision across deployments, but you can type variable names precisely if you wish.
-
-For more information, read <a href="./creating-new-variables.html" class="subnav">Creating New Variables in CredHub</a>.
-
-## <a id="api-variables"></a>Fetching Variable Names and Values
-
-API endpoints are available to help you find variable names and values for products known to the Ops Manager Director. 
-
-For more information, read <a href="./credhub-api-variables.html" class="subnav">Fetching Variable Names and Values</a>.
 
 ## <a id="backup-restore"></a>Backing Up and Restoring CredHub Instances
 
