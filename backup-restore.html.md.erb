@@ -3,27 +3,29 @@ title: Backing Up and Restoring CredHub Instances
 owner: CredHub
 ---
 
+This topic describes how to back up and restore CredHub instances.
+
 CredHub does not store any stateful data. However, CredHub relies on components that do store stateful data.
 
 If you use CredHub in production or a similar environment that needs resiliency, you should create backups regularly so you can recover in the event of a component failure.  
 
-## Components to Back Up
+## <a id='components-to-backup'></a>Components to Back Up
 
 * <a href="#deployment-manifest">Deployment Manifest</a>
 * <a href="#encryption-keys">Encryption Keys</a>
 * <a href="#database">Database</a>
 
-## <a name="deployment-manifest"></a>Back Up the Deployment Manifest
+## <a id="deployment-manifest"></a>Back Up the Deployment Manifest
 
 Back up the CredHub deployment manifest every time you revise it. You may want to keep the backups in a revision control system so you can manage them automatically. 
 
 To download the most recent version of your CredHub deployment manifest, run the following command:
 
 <pre class="terminal">
-$ bosh download manifest DEPLOYMENT-NAME [FILE-PATH]
+$ bosh download manifest DEPLOYMENT-NAME FILE-PATH
 </pre>
 
-## <a name="encryption-keys"></a>Backing Up the Encryption Keys
+## <a id="encryption-keys"></a>Backing Up the Encryption Keys
 
 The process for backing up CredHub encryption keys differs based on the encryption provider you use. CredHub supports internal providers and Luna HSM.
 

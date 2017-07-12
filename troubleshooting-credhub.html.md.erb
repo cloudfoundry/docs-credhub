@@ -3,19 +3,22 @@ title: Troubleshooting CredHub
 owner: CredHub
 ---
 
+This topic describes how to troubleshoot CredHub.
+
 CredHub deployments can fail for various reasons. This topic provides a summary of how to troubleshoot a failed installation or successful installation that does not run as expected. The first section describes deployment failures, which occur when deploying or upgrading CredHub. The second section provides information about <a href="#usability-failures">usability failures</a>, which occur when interacting with CredHub. 
 
-## Deployment Failures
+## <a id='deployment-failures'></a>Deployment Failures
 
 When a deployment fails, it usually falls into one of three categories: 
 <ul>
-<li><a href="#config">Configuration errors</a>, </li>
-<li><a href="#pre-start">Pre-start errors</a>, or </li>
+<li><a href="#config">Configuration errors</a></li>
+<li><a href="#pre-start">Pre-start errors</a> </li>
 <li><a href="#post-start">Post-start errors</a></li>
+</ul>
 
 If you experience an error with a specific message, use the <a href="#errors">Error List</a> to remediate it.
 
-### <a name="config"></a>Configuration Errors
+### <a id="config"></a>Configuration Errors
 
 A configuration error occurs before CredHub deploys. These types of errors are caused by issues in the deployment configuration of CredHub. Here is a sample error: 
 
@@ -56,7 +59,7 @@ Updating deployment:
 Exit code 1
 </pre>
 
-This error indicates a required field is not defined in the manifest. The error above indicates the specific problem, a missing configuration value `Can't find property '["credhub.data_storage.type"]'`.
+This error indicates a required field is not defined in the manifest. The error above indicates the specific problem, a missing configuration value: `Can't find property '["credhub.data_storage.type"]'`.
 
 A similar error may also be caused by missing or invalid values. See the example below: 
 
@@ -84,7 +87,7 @@ Exit code 1
 
 You can narrow down the missing or invalid value for this type of error by checking the specified line number of the template indicated. For example, the above `template 'pre-start.erb' (line 15)` can be found [here.](https://github.com/pivotal-cf/credhub-release/blob/0.4.0/jobs/credhub/templates/pre-start.erb#L15)
 
-### <a name="#pre-start"></a>Pre-Start Errors
+### <a id="pre-start"></a>Pre-Start Errors
 
 Pre-start errors occur when CredHub is unable to perform pre-start tasks. Errors of this type are expressed as follows: 
 
@@ -110,11 +113,11 @@ Updating deployment:
 Exit code 1
 </pre>
 
-Access the pre-start logs to troubleshoot these errors. These logs are stored on the deployed machine in the location `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log`. You must ssh onto or scp the logs from the deployment machine.  
+Access the pre-start logs to troubleshoot these errors. These logs are stored on the deployed machine in the location `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log`. You must SSH onto the deployment machine or SCP the logs from the machine.  
 
 The pre-start logs are much less verbose than the general application logs, so you will probably see the cause of the pre-start failure in the format `keytool error: java.lang.Exception: Input not an X.509 certificate`.  
 
-### <a name="#post-start"></a>Post-Start Errors
+### <a id="post-start"></a>Post-Start Errors
 
 A post-start error is a generic class of errors that occur when BOSH has attempted to deploy and start CredHub, but the health check after deployment indicates that the service could not be reached. This is expressed with the following deployment error: 
 
@@ -140,7 +143,7 @@ Updating deployment:
 Exit code 1
 </pre>
 
-<a name="#logs"></a>Access the application logs to start troubleshooting these errors. The primary application logs are stored on the deployed machine in the location `/var/vcap/sys/log/credhub/credhub.log`. You must ssh to or scp the logs from the deployment machine. 
+<a id="logs"></a>Access the application logs to start troubleshooting these errors. The primary application logs are stored on the deployed machine in the location `/var/vcap/sys/log/credhub/credhub.log`. You must ssh to or scp the logs from the deployment machine. 
 
 These logs are written according to the specified log_level value in the manifest. If you're not seeing the logs you expected, change the value and redeploy.
 
@@ -157,7 +160,7 @@ org.springframework.beans.factory.BeanCreationException: Error creating bean wit
 
 Other errors provide a generic message that may indicate any number of failures. Consult the Error List for more details.
 
-### <a name="#errors"></a>Error List
+### <a id="errors"></a>Error List
 
 #### [Configuration error] Can't find property '["credhub.data_storage.type"]'
 
@@ -171,7 +174,7 @@ This error indicates a failure to parse the yaml of the manifest.
 **To correct this error,** check your manifest at the indicated line number to ensure the keys are properly named and indented. 
 
 ***
-#### [Configuration error] undefined method `[]' for nil:NilClass
+#### [Configuration error] undefined method '[]' for nil:NilClass
 
 This error indicates that a required property in the deployment manifest is undefined. This error includes the template and line number of the failure, such as `Error filling in template 'pre-start.erb' (line 15 ...` 
 
@@ -241,13 +244,13 @@ This failure indicates that the active encryption provider type has not be defin
 
 This failure indicates that the provided encryption key(s) provided in the deployment manifest cannot access any of the data stored in the database. You must update your encryption keys in the deployment manifest and redeploy. 
 
-## <a name="#usability-failures"></a>Usability Failures
+## <a id="usability-failures"></a>Usability Failures
 
 Usability failures occur after a successful deployment of CredHub. These errors are primarily related to the server's ability to reach dependent components. 
 
 A descriptive error should be presented for usability errors when interacting via the API or CLI. If you receive an internal server error without a descriptive error, check the [application logs](#logs) for more information.
 
-### Error List
+### <a id='error-list-usability'></a>Error List
 
 #### Login timeout "Post ht<span>t</span>ps://uaa.example.com:8443/oauth/token/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)"
 
