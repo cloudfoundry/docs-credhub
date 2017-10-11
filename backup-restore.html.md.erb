@@ -48,7 +48,7 @@ If you use a Luna HSM to store sensitive data, you can ensure data resiliency by
 
 CredHub supports management and integration with a high availability (HA) Luna HSM cluster. If you use this configuration, multiple HSMs use mirrored partitions to process incoming requests. Each HSM contains a copy of the encryption key. This provides redundancy, ensuring that all but one of your HSMs could fail without the losing the availability of key material. 
 
-If you us an Luna HSM from AWS, you can also refer to their [reference documentation](http://docs.aws.amazon.com/cloudhsm/latest/userguide/configuring-ha.html) on HA and backup. 
+If you use an Luna HSM from AWS, you can also refer to their [reference documentation](http://docs.aws.amazon.com/cloudhsm/latest/userguide/configuring-ha.html) on HA and backup. 
 
 ### Frequency
 Back up the encryption keys whenever you rotate them to ensure that you always have access to the latest value. 
