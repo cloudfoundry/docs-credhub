@@ -3,13 +3,13 @@ title: Setting Up and Deploying CredHub with BOSH
 owner: CredHub
 ---
 
-This topic provides details about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests. 
+This topic provides details about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests.
 
-If you use [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment), include the file `credhub.yml` to enable CredHub on the BOSH Director VM. 
+If you use [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment), include the file `credhub.yml` to enable CredHub on the BOSH Director VM.
 
 ## <a id="how-it-works"></a> How It Works
 
-CredHub exists co-located on a virtual machine (VM) with the Director, UAA, and other high-level components. A deployment manifest configured with CredHub calls credential information from CredHub and passes it to the appropriate components. 
+CredHub exists co-located on a virtual machine (VM) with the Director, UAA, and other high-level components. A deployment manifest configured with variables calls to Credhub which then passes the credential to the appropriate components.
 
 Once configured, any variable in a BOSH deployment manifest with the syntax <code>((variable-name))</code> causes the Director to retrieve the variable value from CredHub at deploy time. You can tell your manifest already uses CredHub if fields with secure data have <code>((variables))</code> formatted with double parentheses.
 
@@ -72,23 +72,23 @@ If you use an external Hardware Security Module (HSM) to perform cryptographic o
 You can generate values that CredHub requires automatically with the <a href="https://github.com/cloudfoundry/bosh-cli">BOSH v2 CLI</a>. To enable generation, add the variable specifications to the manifest as shown below. You can adjust or remove these if you prefer to provide your own values.
 </li>
 <pre>
-    variables: 
+    variables:
     - name: credhub-ca
       type: certificate
-      options: 
-        is_ca: true 
+      options:
+        is_ca: true
         common_name: 'CredHub CA'
     - name: credhub-tls
       type: certificate
-      options: 
-        ca: credhub-ca 
+      options:
+        ca: credhub-ca
         common_name: credhub.example.com
-        alternative_names: 
+        alternative_names:
         - 10.0.0.10
         - 127.0.0.1
     - name: credhub-encryption-password
       type: password
-</pre>     
+</pre>
 
 <li>Add CredHub properties to the deployment manifest.
 
@@ -119,14 +119,14 @@ You can generate values that CredHub requires automatically with the <a href="ht
               -----BEGIN PUBLIC KEY-----
               ...
               -----END PUBLIC KEY-----
-          mutual_tls: 
-            trusted_cas: 
+          mutual_tls:
+            trusted_cas:
             - |
               -----BEGIN CERTIFICATE-----
               ...
               -----END CERTIFICATE-----
-        encryption: 
-          keys: 
+        encryption:
+          keys:
           - provider_name: corp-hsm
             encryption_key_name: KEY-NAME
             active: true
@@ -143,7 +143,7 @@ You can generate values that CredHub requires automatically with the <a href="ht
               -----BEGIN RSA PRIVATE KEY-----
               ...
               -----END RSA PRIVATE KEY-----
-            servers: 
+            servers:
             - host: hsm.example.com
               port: 1792
               partition_serial_number: 123456
@@ -155,15 +155,15 @@ You can generate values that CredHub requires automatically with the <a href="ht
 
 The example above includes a configuration to use a hardware security module (HSM) for encryption. Alternatively, you can use the internal software-based encryption provider with the configuration below.</br><br>
 
-This method derives a 256-bit key from the provided encryption password and utilized AES256-GCM encryption.  
+This method derives a 256-bit key from the provided encryption password and utilized AES256-GCM encryption.
 
 <pre>
     ...
       encryption:
-        providers: 
+        providers:
         - name: main
           type: internal
-        keys: 
+        keys:
         - provider_name: main
           encryption_password: ((credhub-encryption-password))
           active: true
@@ -181,9 +181,9 @@ For the full list of CredHub properties and default values, read the <a href="ht
           credhub_cli:
             override: true
             authorized-grant-types: password,refresh_token
-            scope: credhub.read,credhub.write 
+            scope: credhub.read,credhub.write
             authorities: uaa.none
-            access-token-validity: 120 
+            access-token-validity: 120
             refresh-token-validity: 1800
             secret: "" # <--- CLI expects this secret to be empty
           director_to_credhub:
@@ -204,10 +204,10 @@ For the full list of CredHub properties and default values, read the <a href="ht
         name: director-name
         config_server:
           enabled: true
-          
+
           # URL must contain /api/ path with trailing slash
           url: "https://127.0.0.1:8844/api/"
-          
+
           ca_cert: |
             -----BEGIN CERTIFICATE-----
             ...
@@ -292,7 +292,7 @@ $ uaac member add credhub.write EXAMPLE-USER OTHER-EXAMPLE-USER
 <li>Install the CredHub CLI.<br/><br><br>
 
 The CredHub CLI offers a simple, scriptable interface to manage stored credentials. You can download the latest release from the <a href="https://github.com/cloudfoundry-incubator/credhub-cli/releases">GitHub repository</a>.
-</li>  
+</li>
 <li>Place or generate credentials in CredHub using the CLI.</li>
 
 <pre class="terminal">
@@ -304,16 +304,16 @@ $ credhub generate --type ssh --name /static/ssh_key
 
 Once you have a Director that integrates with CredHub, you can update your deployment manifests to use it. The example below is of a deployment manifest using two credentials; one stored in Credhub, and one generated by CredHub. <br/><br>
 
-Define credentials that you want to be generated automatically in the <code>variables</code> section. 
+Define credentials that you want to be generated automatically in the <code>variables</code> section.
 </li>
-<pre> 
+<pre>
     name: Sample-Manifest</br>
     releases:
     - name: shell
       url: https<span>:</span>//bosh.io/d/github.com/cloudfoundry-community/shell-boshrelease?v=3.2.0
       sha1: 893b10af531a7519da99bb8656cc07b8277d1692</br>
     #...</br>
-    variables: 
+    variables:
     - name: generated/ssh\_key
       type: ssh</br>
     jobs:
