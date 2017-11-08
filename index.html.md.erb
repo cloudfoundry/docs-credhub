@@ -26,7 +26,7 @@ CredHub consists of a REST API and a CLI. The REST API conforms to the Config Se
 
 ![Diagram shows that the CredHub CLI interacts with CredHub to export credentials to the Encryption Provider, Data Store, and Authentication Provider](images/basic-architecture.png)
 
-<% if vars.dumpling %>
+<% if vars.product_name != 'CF' %>
 <%= partial '../customizing/bosh-runtime-credhub' %>
 <% end %>
 
