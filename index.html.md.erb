@@ -4,11 +4,24 @@ owner: CredHub
 ---
 
 
-## <a id="overview"></a>Overview
+<div class="quick-links">
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="what-can-it-do">What Can CredHub Do?</a></li>
+<li><a href="application-architecture">Application Architecture</a></li><% if vars.product_name == 'CF' %><li><a href="deployment-architecture">Deployment Architecture</a><ul>
+<li><a href="colocated">Colocated with the BOSH Director</a></li>
+<li><a href="service">Deployed as a Service</a></li>
+</ul></li><% else %><%= vars.credhub_index_menu %><% end %>
+<li><a href="cred-types">CredHub Credential Types</a></li>
+<li><a href="backup-restore">Backing Up and Restoring CredHub Instances</a></li>
+</ul>
+</div>
+
+## <a name="overview"></a>Overview
 
 CredHub is a component designed for centralized credential management in <%= vars.first_product_name %>. It is a single component that can address several scenarios in the <%= vars.product_name %> ecosystem. At the highest level, CredHub centralizes and secures credential generation, storage, lifecycle management, and access.
 
-## <a id="what-can-it-do"></a>What Can CredHub Do?
+## <a name="what-can-it-do"></a>What Can CredHub Do?
 
 CredHub performs a number of different functions to help generate and protect the credentials in your <%= vars.product_name %> deployment, including:
 
@@ -21,7 +34,7 @@ CredHub performs a number of different functions to help generate and protect th
 * Credential metadata
 * Credential versioning
 
-## <a id="application-architecture"></a>Application Architecture
+## <a name="application-architecture"></a>Application Architecture
 CredHub consists of a REST API and a CLI. The REST API conforms to the Config Server API spec. CredHub is an OAuth2 resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation capabilities. 
 
 ![Diagram shows that the CredHub CLI interacts with CredHub to export credentials to the Encryption Provider, Data Store, and Authentication Provider](images/basic-architecture.png)
@@ -32,13 +45,13 @@ CredHub consists of a REST API and a CLI. The REST API conforms to the Config Se
 <%= partial '../customizing/bosh-runtime-credhub' %>
 <% end %>
 
-## <a id="cred-types"></a>CredHub Credential Types
+## <a name="cred-types"></a>CredHub Credential Types
 
 Credentials exist in multiple places in the <%= vars.product_name %> ecosystem. <%= vars.product_name %> components use credentials to authenticate connections between components. <%= vars.product_name %> installations often have hundreds of active credentials. Leaked credentials are common causes of data and security breaches, so managing them securely is very important. 
 
 For more information, read <a href="./credential-types.html" class="subnav">CredHub Credential Types</a>.
 
-## <a id="backup-restore"></a>Backing Up and Restoring CredHub Instances
+## <a name="backup-restore"></a>Backing Up and Restoring CredHub Instances
 
 The CredHub application does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help prevent data loss if an individual component fails. For more information, read <a href="./backup-restore.html" class="subnav">Backing Up and Restoring CredHub Instances</a>.
 
