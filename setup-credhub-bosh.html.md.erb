@@ -3,17 +3,27 @@ title: Setting Up and Deploying CredHub with BOSH
 owner: CredHub
 ---
 
+<% if vars.product_name == 'CF' %>
+<div class="quick-links">
+    <ul>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#setup">Setup Before Deployment</a></li>
+        <li><a href="#configure">Configuring the Director</a></li>
+        <li><a href="#using-credhub">Using CredHub</a></li>
+    </ul>
+</div>
+
 This topic provides details about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests.
 
 If you use [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment), include the file `credhub.yml` to enable CredHub on the BOSH Director VM.
 
-## <a id="how-it-works"></a> How It Works
+## <a name="how-it-works"></a> How It Works
 
 CredHub exists co-located on a virtual machine (VM) with the Director, UAA, and other high-level components. A deployment manifest configured with variables calls to Credhub which then passes the credential to the appropriate components.
 
 Once configured, any variable in a BOSH deployment manifest with the syntax <code>((variable-name))</code> causes the Director to retrieve the variable value from CredHub at deploy time. You can tell your manifest already uses CredHub if fields with secure data have <code>((variables))</code> formatted with double parentheses.
 
-## <a id="setup"></a> Setup Before Deployment
+## <a name="setup"></a> Setup Before Deployment
 
 1. Set up BOSH Director.<br/><br>
 The following configuration steps assume that you have an existing BOSH Director. If you do not have a Director, read the [initialization guide](https://bosh.io/docs/init.html) for more details.
@@ -31,7 +41,7 @@ If you use an external Hardware Security Module (HSM) to perform cryptographic o
     <br><br>
     For more information about the required HSM values and how to configure an HSM, read about [configuring a Luna HSM](./hsm-config.html).
 
-## <a id="configure"></a> Configuring the Director
+## <a name="configure"></a> Configuring the Director
 <ol>
 <li>Update the deployment manifest to include the CredHub release. <a href="https://bosh.io/releases/github.com/pivotal-cf/credhub-release?all=1">Download the latest CredHub release from bosh.io</a>.</li>
 
@@ -261,7 +271,7 @@ If you are using the internal Director database, you must provision an additiona
 <li>Deploy.</li>
 </ol>
 
-## <a id="using-credhub"></a>Using CredHub
+## <a name="using-credhub"></a>Using CredHub
 
 <ol>
 <li>Create CredHub users in UAA.
@@ -336,3 +346,8 @@ Define credentials that you want to be generated automatically in the <code>vari
                       - ((/static/ssh\_key))
                       - ((generated/ssh\_key))
 </pre>
+<% else %>
+The Ops Manager Director and Pivotal Application Service (PAS) tiles deploy
+CredHub instances as part of the installation process. See [Installing Pivotal
+Cloud Foundry](../installing/) for more information.
+<% end %>
