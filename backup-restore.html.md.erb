@@ -3,19 +3,29 @@ title: Backing Up and Restoring CredHub Instances
 owner: CredHub
 ---
 
+<% if vars.product_name == 'CF' %>
+<div class="quick-links">
+    <ul>
+        <li><a href="#components-to-backup">Components to Back Up</a></li>
+        <li><a href="#deployment-manifest">Deployment Manifest</a></li>
+        <li><a href="#encryption-keys">Encryption Keys</a></li>
+        <li><a href="#database">Database</a></li>
+    </ul>
+</div>
+
 This topic describes how to back up and restore CredHub instances.
 
 CredHub does not store any stateful data. However, CredHub relies on components that do store stateful data.
 
 If you use CredHub in production or a similar environment that needs resiliency, you should create backups regularly so you can recover in the event of a component failure.  
 
-## <a id='components-to-backup'></a>Components to Back Up
+## <a name='components-to-backup'></a>Components to Back Up
 
 * <a href="#deployment-manifest">Deployment Manifest</a>
 * <a href="#encryption-keys">Encryption Keys</a>
 * <a href="#database">Database</a>
 
-## <a id="deployment-manifest"></a>Back Up the Deployment Manifest
+## <a name="deployment-manifest"></a>Back Up the Deployment Manifest
 
 Back up the CredHub deployment manifest every time you revise it. You may want to keep the backups in a revision control system so you can manage them automatically. 
 
@@ -25,7 +35,7 @@ To download the most recent version of your CredHub deployment manifest, run the
 $ bosh manifest -d MY-DEPLOYMENT > MY-MANIFEST.yml
 </pre>
 
-## <a id="encryption-keys"></a>Backing Up the Encryption Keys
+## <a name="encryption-keys"></a>Backing Up the Encryption Keys
 
 The process for backing up CredHub encryption keys differs based on the encryption provider you use. CredHub supports internal providers and Luna HSM.
 
@@ -70,3 +80,7 @@ See the following topics for more information about database backups:
 ### Frequency
 
 Database best practices dictate that you perform backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
+
+<% else %>
+<%= partial '../customizing/_credhub-bbr' %>
+<% end %>
