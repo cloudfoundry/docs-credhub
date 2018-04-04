@@ -79,7 +79,7 @@ If you use an external Hardware Security Module (HSM) to perform cryptographic o
 
 <li><strong>(Optional)</strong> Add variable generation specifications for CredHub properties.<br/><br>
 
-You can generate values that CredHub requires automatically with the <a href="https://github.com/cloudfoundry/bosh-cli">BOSH v2 CLI</a>. To enable generation, add the variable specifications to the manifest as shown below. You can adjust or remove these if you prefer to provide your own values.
+You can generate values that CredHub requires automatically with the <a href="https://github.com/cloudfoundry/bosh-cli">BOSH CLI</a>. To enable generation, add the variable specifications to the manifest as shown below. You can adjust or remove these if you prefer to provide your own values.
 </li>
 <pre>
     variables:
@@ -347,7 +347,7 @@ Define credentials that you want to be generated automatically in the <code>vari
                       - ((generated/ssh\_key))
 </pre>
 <% else %>
-The Ops Manager Director and Pivotal Application Service (PAS) tiles deploy
+The BOSH Director and Pivotal Application Service (PAS) tiles deploy
 CredHub instances as part of the installation process. See [Installing Pivotal
 Cloud Foundry](../installing/) for more information.
 <% end %>
