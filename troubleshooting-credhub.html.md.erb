@@ -3,24 +3,25 @@ title: Troubleshooting CredHub
 owner: CredHub
 ---
 
-This topic describes how to troubleshoot CredHub.
-
-CredHub deployments can fail for various reasons. This topic provides a summary of how to troubleshoot a failed installation or successful installation that does not run as expected. The first section describes deployment failures, which occur when deploying or upgrading CredHub. The second section provides information about <a href="#usability-failures">usability failures</a>, which occur when interacting with CredHub. 
+This topic describes errors that may occur when you deploy, upgrade,
+or interact with CredHub.
 
 ## <a id='deployment-failures'></a>Deployment Failures
 
-When a deployment fails, it usually falls into one of three categories: 
+CredHub deployment failures include the following:
 <ul>
 <li><a href="#config">Configuration errors</a></li>
 <li><a href="#pre-start">Pre-start errors</a> </li>
 <li><a href="#post-start">Post-start errors</a></li>
 </ul>
 
-If you experience an error with a specific message, use the <a href="#errors">Error List</a> to remediate it.
+For additional information about troubleshooting GredHub deployment failures,
+see [Error List](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list)
+on GitHub.
 
 ### <a id="config"></a>Configuration Errors
 
-A configuration error occurs before CredHub deploys. These types of errors are caused by issues in the deployment configuration of CredHub. Here is a sample error: 
+Configuration errors occur before CredHub deploys. For example:
 
 <pre class="terminal">
 Using deployment 'credhub'
@@ -31,11 +32,14 @@ Evaluating manifest:
 Exit code 1
 </pre>
 
-This class of errors always start with "yaml" and occur before the BOSH task is created. They indicate an error in parsing the manifest yaml. 
+Configuration errors start with `yaml` and occur before the BOSH task is created.
+They indicate an error in parsing your manifest.
 
-**To correct these kinds of errors**, validate the structure of your manifest at the line specified to ensure it uses the proper format and indentation. 
+To correct a configuration error,
+review the structure of your manifest at the line specified in the error message
+to ensure its format and indentation are valid.
 
-You may also see the following error format. 
+In addition, you may see the following error format:
 
 <pre class="terminal">
 Task 474
@@ -47,8 +51,8 @@ Task 474
     - Unable to render templates for job 'credhub'. Errors are:
       - Error filling in template 'application.yml.erb' (line 22: Can't find property '["credhub.data_storage.type"]')
 
-Started  Thu Jan 26 18:20:35 UTC 2017
-Finished Thu Jan 26 18:20:52 UTC 2017
+Started  Thu Jan 26 18:20:35 UTC 2019
+Finished Thu Jan 26 18:20:52 UTC 2019
 Duration 00:00:17
 
 Task 474 error
@@ -59,9 +63,14 @@ Updating deployment:
 Exit code 1
 </pre>
 
-This error indicates a required field is not defined in the manifest. The error above indicates the specific problem, a missing configuration value: `Can't find property '["credhub.data_storage.type"]'`.
+This error occurs when a required field is not defined in the manifest.
+In the example above, the following configuration value is missing:
 
-A similar error may also be caused by missing or invalid values. See the example below: 
+```
+Can't find property '["credhub.data_storage.type"]'
+```
+
+Missing or invalid values may cause another similar error as shown below:
 
 <pre class="terminal">
 Task 697
@@ -73,8 +82,8 @@ Task 697
     - Unable to render templates for job 'credhub'. Errors are:
       - Error filling in template 'pre-start.erb' (line 15: undefined method `[]' for nil:NilClass)
 
-Started  Thu Jan 26 21:27:55 UTC 2017
-Finished Thu Jan 26 21:28:13 UTC 2017
+Started  Thu Jan 26 21:27:55 UTC 2019
+Finished Thu Jan 26 21:28:13 UTC 2019
 Duration 00:00:18
 
 Task 697 error
@@ -85,11 +94,12 @@ Updating deployment:
 Exit code 1
 </pre>
 
-You can narrow down the missing or invalid value for this type of error by checking the specified line number of the template indicated. For example, the above `template 'pre-start.erb' (line 15)` can be found [here.](https://github.com/pivotal-cf/credhub-release/blob/0.4.0/jobs/credhub/templates/pre-start.erb#L15)
+When troubleshooting this error, use the line number and the template specified in the
+error message to identify the missing or invalid value.
 
 ### <a id="pre-start"></a>Pre-Start Errors
 
-Pre-start errors occur when CredHub is unable to perform pre-start tasks. Errors of this type are expressed as follows: 
+Pre-start errors occur when CredHub is unable to perform pre-start tasks. For example:
 
 <pre class="terminal">
 Task 789
@@ -101,8 +111,8 @@ Task 789
 
 22:34:46 | Error: Action Failed get_task: Task c69563a2-51e7-4b10-5c64-bb084ef85863 result: 1 of 1 pre-start scripts failed. Failed Jobs: credhub.
 
-Started  Thu Jan 26 22:34:08 UTC 2017
-Finished Thu Jan 26 22:34:46 UTC 2017
+Started  Thu Jan 26 22:34:08 UTC 2019
+Finished Thu Jan 26 22:34:46 UTC 2019
 Duration 00:00:38
 
 Task 789 error
@@ -113,13 +123,18 @@ Updating deployment:
 Exit code 1
 </pre>
 
-Access the pre-start logs to troubleshoot these errors. These logs are stored on the deployed machine in the location `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log`. You must SSH onto the deployment machine or SCP the logs from the machine.  
+#### <a name="logs"></a> Accessing Logs
 
-The pre-start logs are much less verbose than the general application logs, so you will probably see the cause of the pre-start failure in the format `keytool error: java.lang.Exception: Input not an X.509 certificate`.  
+Pre-start logs are stored in the
+`/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log` files.
+
+To troubleshoot pre-start errors, access these logs.
+You must SSH into the deployment machine or SCP the logs from the machine.
 
 ### <a id="post-start"></a>Post-Start Errors
 
-A post-start error is a generic class of errors that occur when BOSH has attempted to deploy and start CredHub, but the health check after deployment indicates that the service could not be reached. This is expressed with the following deployment error: 
+Post-start errors occur when a post-start script fails.
+For example:
 
 <pre class="terminal">
 Task 478
@@ -131,8 +146,8 @@ Task 478
 
 20:06:27 | Error: Action Failed get_task: Task 5fe7ac60-4ccc-4bda-4ccb-6e88908597ef result: 1 of 1 post-start scripts failed. Failed Jobs: credhub.
 
-Started  Thu Jan 26 20:03:32 UTC 2017
-Finished Thu Jan 26 20:06:27 UTC 2017
+Started  Thu Jan 26 20:03:32 UTC 2019
+Finished Thu Jan 26 20:06:27 UTC 2019
 Duration 00:02:55
 
 Task 478 error
@@ -143,117 +158,29 @@ Updating deployment:
 Exit code 1
 </pre>
 
-<a id="logs"></a>Access the application logs to start troubleshooting these errors. The primary application logs are stored on the deployed machine in the location `/var/vcap/sys/log/credhub/credhub.log`. You must ssh to or scp the logs from the deployment machine. 
+#### <a name="app-logs"></a> Accessing Logs
 
-These logs are written according to the specified log_level value in the manifest. If you're not seeing the logs you expected, change the value and redeploy.
+The CredHub log is stored in the
+`/var/vcap/sys/log/credhub/credhub.log` file.
 
-A search in the logs for `ERROR` should locate the reason for the failure. A quick method for this is to use the command `grep -A 2 ERROR /var/vcap/sys/log/credhub/credhub.log`. Monit will continually attempt to restart a failing CredHub process, so there may be multiple instances of the same error. It is best to locate the most recent error and work backward from there.
+To troubleshoot post-start errors, access these logs.
+You must SSH into the deployment machine or SCP the logs from the machine.
 
-In addition, you can review other log files in the `/var/vcap/sys/log/credhub` directory. Most of these log files will probably be empty. 
+<p class='note'><strong>Note:</strong> The CredHub log is written according to the log
+level, <code>log_level</code>, specified in your manifest.</p>
 
-Many of these errors will provide a clear indication of the problem. For example, the below message displays if the application is unable to access the configured database. The message `Unable to obtain Jdbc connection from DataSource` points to the problem. 
+To locate the cause of the failure, search for `ERROR` in the logs.
+Because Monit attempts to restart a failing CredHub process,
+you may see multiple instances of the same error.
 
-<pre class="terminal">
-2017-01-26T20:19:10.830Z [main] .... ERROR --- SpringApplication: Application startup failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'flywayInitializer' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Invocation of init method failed; nested exception is org.flywaydb.core.api.FlywayException: Unable to obtain Jdbc connection from DataSource
-</pre>
-
-Other errors provide a generic message that may indicate any number of failures. Consult the Error List for more details.
-
-### <a id="errors"></a>Error List
-
-#### [Configuration error] Can't find property '["credhub.data_storage.type"]'
-
-**To correct this error,** add the missing property identified in the error (in the example above, the missing property is `credhub.data_storage.type`). 
-
-***
-#### [Configuration error] Evaluating manifest: yaml: line 54: did not find expected key OR yaml: line 53: mapping values are not allowed in this context
-
-This error indicates a failure to parse the yaml of the manifest. 
-
-**To correct this error,** check your manifest at the indicated line number to ensure the keys are properly named and indented. 
-
-***
-#### [Configuration error] undefined method '[]' for nil:NilClass
-
-This error indicates that a required property in the deployment manifest is undefined. This error includes the template and line number of the failure, such as `Error filling in template 'pre-start.erb' (line 15 ...` 
-
-The referenced line may not point exactly to the missing value. For instance, an error may point to a line of code when it cannot properly resolve the provider of the active key. You should validate the configuration of the entire section that holds the value for these errors, e.g. the encryption section for an error involving active_provider['type'].
-
-**To correct this error,** narrow down the missing value for this type of error by checking the specified line number of the template indicated and correct it if required.
-
-***
-#### [Configuration error] Error: Failed to obtain valid token from UAA
-
-This error indicates that the director was unable to obtain a token from the UAA server to authenticate with CredHub. This may be caused by an invalid client name or secret in the `director.config_server.uaa` configuration or a network issue that prevents the director from reaching UAA at the configured location. 
-
-**To correct this error,** confirm that your network connection is good and that your `director.config_server.uaa` configuration is correct.
-
-***
-#### [Pre-start error] keytool error: java.lang.Exception: Input not an X.509 certificate
-
-This error indicates that CredHub was unable to load either the database CA or TLS certificate from the manifest into a Java KeyStore. 
-
-**To correct this error,** validate that the provided certificates are valid with the command `openssl x509 -text -noout -in cert.pem`. Also confirm that the certificate indentation and formatting is as expected in the manifest.
-
-***
-#### [Post-start error] Error creating bean with name 'flywayInitializer' defined in class path resource or Unable to obtain Jdbc connection from DataSource or ConnectionPool: Unable to create initial connections of pool
-
-This error indicates that the application is not able to reach the configured database. 
-
-**To correct this error,** confirm that:
-<ul>
-<li>The database exists targeted database server</li> 
-<li>The named database to store CredHub data exists on the targeted database server before you deploy CredHub. Validate this by connecting to the database server and listing the existing databases.</li>
-<li>The username and password must be valid and have the ability to access the specified database. Validate this by connecting to the database with provided credentials.</li>
-<li>The deployment can reach the database server.</li>
-<li>The deployed machine can reach the specified database server. Validate this by ssh-ing into the deployment machine and attempting to connect to the database from that location. If you are unable to connect from the deployment machine, you should validate the ingress and egress rules of the machine and targeted database server.</li>
-<li>SSL configuration is correct and configured CA is valid.</li>
-<li>If you have set the property `data_storage.require_tls: true` in your manifest, you must ensure the connection is able to verify TLS connection to the server. This requires specifying the connection's CA certificate in the configuration `data_storage.tls_ca`.</li>
-</ul> 
-
-***
-#### [Post-start error] Caused by: com.safenetinc.luna.LunaException: Slot -1 uninitialized
-
-This error indicates a general failure to connect to the configured Luna HSM. You should validate all of the configurations for the encryption provider to resolve this issue. 
-
-**To correct this error,** confirm that:
-<ul>
-<li>The machine can reach the HSM.</li>
-<li>The deployed machine can reach the HSM. Validate this by ssh-ing into the deployment machine and attempting to connect to the HSM from that location with the command `nc -v 10.0.0.10 1792`. It should print `Connection to 10.0.0.10 1792 port [tcp/*] succeeded!` if successful. If you are unable to connect from the deployment machine, check to confirm the ingress and egress rules of the machine and targeted HSM are compatible.</li> 
-<li>The certificate and client certificate are not expired.</li>
-<li>Check the certificate expiration with the OpenSSL command `openssl x509 -text -noout -in cert.pem`.</li>
-<li>The certificate, client certificate, and client key are all valid. Check the certificates with the above command and the private key with the command `openssl rsa -text -noout -in key.pem`</li>
-<li>The client certificate and key must correspond to each other. Confirm this by comparing them with the command `openssl x509 -modulus -noout -in ccert.pem | sha1sum; openssl rsa -modulus -noout -in key.pem | sha1sum;`</li>
-<li>The client certificate and key must be registered on the HSM. Validate the registered clients on the HSM by ssh-ing into the HSM and running `client list.` This command displays all of the registered clients on the HSM. The command `client fingerprint -client client_name` prints the MD5 hash of the client certificate. Compare this to your client certificate with the command `openssl x509 -in clientcert.pem -outform DER | md5sum`.</li>
-<li>The client certificate must be configured for the host and partition. Validate the configuration with the command `client show -client client_name`. This lists the assigned partitions and host IP address for the client.</li>
-<li>The partition must not be locked. Validate whether the partition is locked with the command `partition show -partition partition_name`. This will show whether the partition is locked in the field 'Partition Owner Locked Out'. If the partition is locked, you must login as HSM Admin `hsm login` then reset the partition password `partition resetPw -partition partition_name`.</li> 
-<li>The partition password must be valid. Confirm that the partition password was rejected by reviewing 'login attempt left' metric of the partition with command `partition show -partition partition_name`. If the number decrements per deployment, the provided password is being rejected. Reset the partition password as described in the previous bullet.</li>
-</ul>
-***
-#### [Post-start error] Error creating bean with name 'encryptionKeyService' or 'encryptionKeyCanaryMapper' or Failed to instantiate [org.cloudfoundry.credhub.service.BCEncryptionService]
-
-This failure indicates that CredHub was unable to start its data encryption service from the provided configuration. This is caused by a configuration of the keys and/or providers section of the manifest. Validate that the specified `encryption.keys` contain valid values for `dev_key` or `encryption_key_name`. Also validate that the `encryption.providers` specified include valid values.
-
-***
-#### [Post-start error] org.cloudfoundry.credhub.service.EncryptionKeyCanaryMapper required a bean of type 'org.cloudfoundry.credhub.service.EncryptionService' that could not be found
-
-This failure indicates that the active encryption provider type has not be defined or is an invalid value. Check the `encryption.providers.type` value in your manifest.
-
-#### [Post-start error] The encryption keys provided cannot decrypt any of the value(s) in the database
-
-This failure indicates that the provided encryption key(s) provided in the deployment manifest cannot access any of the data stored in the database. You must update your encryption keys in the deployment manifest and redeploy. 
+In addition, you can review other log files in the `/var/vcap/sys/log/credhub` directory.
 
 ## <a id="usability-failures"></a>Usability Failures
 
-Usability failures occur after a successful deployment of CredHub. These errors are primarily related to the server's ability to reach dependent components. 
+Usability failures occur after a successful deployment of CredHub.
+If you receive an internal server error without a descriptive error message,
+review the CredHub log as described in [Accessing Logs](#app-logs).
 
-A descriptive error should be presented for usability errors when interacting via the API or CLI. If you receive an internal server error without a descriptive error, check the [application logs](#logs) for more information.
-
-### <a id='error-list-usability'></a>Error List
-
-#### Login timeout "Post ht<span>t</span>ps://uaa.example.com:8443/oauth/token/: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)"
-
-This error indicates that the CLI cannot reach the configured UAA instance. The CLI contacts the UAA instance directly during a login request. 
-
-**To correct this error:** confirm that the configured UAA address is valid and that it is configured to be reachable from your request location. 
+For additional information about troubleshooting usability failures,
+see [Error List](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list-1)
+on GitHub.
