@@ -61,31 +61,3 @@ For more information, read <a href="./credential-types.html" class="subnav">Cred
 ## <a name="backup-restore"></a>Backing Up and Restoring CredHub Instances
 
 The CredHub application does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help prevent data loss if an individual component fails. For more information, read <a href="./backup-restore.html" class="subnav">Backing Up and Restoring CredHub Instances</a>.
-
-<% if false  %>
-CredHub can also be deployed as an independent service on one or more VMs. The application does not hold state, so it may be scaled to multiple instances that share a common database cluster and encryption provider.
-
-This architecture benefits from high availability and scale, however, the additional cost and complexity may not be suitable for a single or small number of consumers.
-
-For more information, read <a href="./setup-credhub-service-creds.html" class="subnav">Setting Up and Deploying CredHub with Service Credentials</a>.
-
-## Troubleshooting
-
-If something goes wrong, CredHub should provide descriptive errors. In many cases, the error will provide insight into the how to resolve the issue. For complex errors, you may need to review the application logs to locate the source of the issue.
-
-For more information, read <a href="./troubleshooting-credhub.html" class="subnav">Troubleshooting CredHub</a>.
-
-## Hardware Security Modules
-
-CredHub includes support for utilizing Luna HSMs for encryption operations. When configured to use this provider, all encryption and decryption operations are performed by the HSM. CredHub supports a high availability HSM configuration to preserve uptime and key material in the event of a hardware failure. Because the encryption key on an HSM cannot be extracted for backup, you must take extra care to configure an HSM deployment with redundancy to protect your data.
-
-For more information, read <a href="./hsm-config.html" class="subnav">Configuring a Hardware Security Module</a>.
-
-
-## Migrating Existing Credentials to CredHub
-
-In some cases, you can migrate credentials that already exist in your deployment into CredHub.
-
-For more information, read <a href="./migrating-credentials.html" class="subnav">Migrating Existing Credentials to CredHub.</a>
-
-<% end %>
