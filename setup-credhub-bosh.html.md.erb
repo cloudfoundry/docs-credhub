@@ -293,8 +293,10 @@ $ uaac user add OTHER-EXAMPLE-USER --emails email<span>@</span>example.com
   Password:  ********
   Verify password:  ********
   user account successfully added<br/>
+$ uaac group add credhub.read
 $ uaac member add credhub.read EXAMPLE-USER OTHER-EXAMPLE-USER
   success<br/>
+$ uaac group add credhub.write
 $ uaac member add credhub.write EXAMPLE-USER OTHER-EXAMPLE-USER
   success
 </pre>
