@@ -1,0 +1,91 @@
+---
+title: Writing a Kubernetes Compatible Key Management Service Plugin for CredHub
+owner: CredHub
+---
+
+<% if vars.product_name == 'CF' %>
+This topic describes how to connect a CredHub to an arbitrary Key Management Service using the Kubernetes API.
+
+CredHub is shipped with its own internal encryption, however users of CredHub may want to defer that responsibility to a third party Key Management Service.
+
+CredHub consumes the Kubernetes API for KMS plugins. The interface definition is in the [protobuf format](https://developers.google.com/protocol-buffers/docs/proto3). 
+
+Any plugin which implements this API should be compatible with CredHub. If a plugin has not been created for a KMS provider, you can create one using the following instructions.
+
+## <a name='implemeting-the-plugin'></a>Implementing the Plugin
+
+You can implement the KeyManagementService interface shown [here](https://github.com/pivotal/sample-credhub-kms-plugin/blob/85deb9b230a7b8c0d6a71a6d8ad1c37aa5be28ae/v1beta1/service.proto)
+in any language you like.
+
+The three methods you must implement are:
+
+```go
+// This service defines the public APIs for remote KMS provider.
+service KeyManagementService {
+  // Version returns the runtime name and runtime version of the KMS provider.
+  rpc Version(VersionRequest) returns (VersionResponse) {}
+
+  // Execute decryption operation in KMS provider.
+  rpc Decrypt(DecryptRequest) returns (DecryptResponse) {}
+
+  // Execute encryption operation in KMS provider.
+  rpc Encrypt(EncryptRequest) returns (EncryptResponse) {}
+}
+```
+
+We provide an [example plugin](https://github.com/pivotal/sample-credhub-kms-plugin/blob/85deb9b230a7b8c0d6a71a6d8ad1c37aa5be28ae/plugin/plugin.go) that "encrypts" using Base64 encoding.
+
+The Kubernetes team also provides an [example plugin](https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apiserver/pkg/storage/value/encrypt/envelope/v1beta1/service.pb.go#L230-L255) which connects to a fake Key Management Service.
+
+
+## <a name='deploying-credhub-with-the-plugin'></a>Deploying Credhub With the Plugin
+
+CredHub is deployed using [BOSH](https://bosh.io/docs/), so the plugin will also need to be deployed as a BOSH Release on the same instance group as CredHub.
+
+
+### Building a BOSH Release
+
+You will need to write a BOSH Release that runs your plugin with a defined socket, as you will need to reference this socket in your CredHub BOSH manifest. See the docs on [Creating a BOSH Release](https://docs.pivotal.io/tiledev/2-2/bosh-release.html#create) for instructions on how to configure your release.
+
+We provide a [sample release](https://github.com/pivotal/sample-credhub-kms-plugin-release) that runs the `sample-credhub-kms-plugin` on a socket.
+
+### Deploying CredHub with Your Plugin Release
+
+In order to deploy CredHub with your plugin, some modifications must be made to the CredHub BOSH manifest to include the new encryption provider and keys. We provide a sample [ops-file](https://bosh.io/docs/cli-ops-files/) which works with the `sample-credhub-kms-plugin` that can be applied to the CredHub BOSH manifest:
+
+```yaml
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: sample-credhub-kms-plugin
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/-
+  value:
+    provider_name: sample
+    key_properties:
+      encryption_key_name: some-key-name-1
+    active: true
+
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/providers/-
+  value:
+    name: sample
+    type: kms-plugin
+    connection_properties:
+      endpoint: /var/vcap/sys/run/kms-plugin/kms-plugin.sock
+
+- type: replace
+  path: /instance_groups/name=credhub/jobs/-
+  value:
+    name: kms-plugin
+    release: sample-credhub-kms-plugin
+
+- type: replace
+  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/provider_name=int/active
+  value: false
+```
+
+<% end %>
