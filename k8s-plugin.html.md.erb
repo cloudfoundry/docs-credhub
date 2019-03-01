@@ -16,6 +16,7 @@ In order to use a KMS, you must deploy a plugin with CredHub. CredHub consumes t
 Any plugin that implements the Kubernetes API should be compatible with CredHub. Consult the documentation for your KMS provider to learn whether a plugin exists.
 
 If a plugin has not been created for your KMS provider, create one using the following instructions.
+Otherwise, you can skip to [deploying](#deploy-credhub-with-plugin)
 
 ## <a id='implement'></a>Implement the Plugin
 
@@ -43,11 +44,9 @@ For example plugins, see the following:
 
 * An [example plugin](https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apiserver/pkg/storage/value/encrypt/envelope/v1beta1/service.pb.go#L230-L255) that connects to a fake KMS
 
-## <a id='deploy'></a>Deploy Credhub with the Plugin
+## <a id='build-a-release'></a>Build a BOSH Release
 
 CredHub is deployed using [BOSH](https://bosh.io/docs/), so you must deploy the plugin as a BOSH release on the same instance group as CredHub.
-
-### <a id='build-release'></a> Build a BOSH Release
 
 Perform the procedures in [Creating a Release](https://bosh.io/docs/create-release/) in the BOSH documentation to create a BOSH release for your plugin.
 
@@ -55,7 +54,7 @@ Your BOSH release must run the plugin with a defined socket, as you will need to
 
 For an example of a BOSH release of a CredHub KMS plugin with a defined socket, see the [sample release](https://github.com/pivotal/sample-credhub-kms-plugin-release) of the `sample-credhub-kms-plugin`. 
 
-###<a id='deploy-credhub-with-plugin'></a> Deploy CredHub with Your Plugin Release
+## <a id='deploy-credhub-with-plugin'></a> Deploy CredHub with Your Plugin Release
 
 In order to deploy CredHub with your plugin, you must modify the CredHub BOSH manifest to include the new encryption provider and keys. 
 
@@ -92,10 +91,20 @@ The following example ops file modifies the CredHub BOSH manifest to work with t
   value:
     name: kms-plugin
     release: sample-credhub-kms-plugin
+    properties:
+      kms-plugin:
+        socket_endpoint: /var/vcap/sys/run/kms-plugin/kms-plugin.sock
 
 - type: replace
   path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/provider_name=int/active
   value: false
+```
+
+
+Run the following command to deploy your CredHub and custom plugin.
+
+```bash
+$ bosh -d <deployment-name> credhub-manifest.yml -o ops-file.yml
 ```
 
 <% end %>
