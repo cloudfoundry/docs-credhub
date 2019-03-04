@@ -1,5 +1,5 @@
 ---
-title: Writing a Kubernetes Compatible Key Management Service Plugin for CredHub
+title: Using a Key Management Service with CredHub
 owner: CredHub
 ---
 
@@ -13,10 +13,11 @@ CredHub ships with its own internal encryption. However, you may want to use the
 
 In order to use a KMS, you must deploy a plugin with CredHub. CredHub consumes the Kubernetes API for KMS plugins. The interface definition is in the `protobuf` format. For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
 
-Any plugin that implements the Kubernetes API should be compatible with CredHub. Consult the documentation for your KMS provider to learn whether a plugin exists.
+Any plugin that implements the Kubernetes API should be compatible with CredHub. Consult the documentation for your KMS provider to learn whether a plugin exists. 
 
-If a plugin has not been created for your KMS provider, create one using the following instructions.
-Otherwise, you can skip to [deploying](#deploy-credhub-with-plugin)
+If a plugin exists for your KMS provider, skip to [Deploy CredHub with Your Plugin Release](#deploy-credhub-with-plugin).
+
+If a plugin has not been created for your KMS provider, start at [Implement the Plugin](#implement).
 
 ## <a id='implement'></a>Implement the Plugin
 
@@ -60,51 +61,63 @@ In order to deploy CredHub with your plugin, you must modify the CredHub BOSH ma
 
 You can modify the CredHub BOSH manifest with an ops file. An ops file is a YAML file that includes multiple operations to be applied to a different YAML file, such as a manifest. For more information about how to create an ops file, see [Creating Ops Files](https://bosh.io/docs/cli-ops-files/) in the BOSH documentation.
 
-The following example ops file modifies the CredHub BOSH manifest to work with the `sample-credhub-kms-plugin`:
+Perform the following steps:
 
-```yaml
----
-- type: replace
-  path: /releases/-
-  value:
-    name: sample-credhub-kms-plugin
-    version: latest
+1. Create an ops file. Consult the following example, which modifies the CredHub BOSH manifest to work with the `sample-credhub-kms-plugin`:
 
-- type: replace
-  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/-
-  value:
-    provider_name: sample
-    key_properties:
-      encryption_key_name: some-key-name-1
-    active: true
+    ```yaml
+    ---
+    - type: replace
+      path: /releases/-
+      value:
+        name: sample-credhub-kms-plugin
+        version: latest
 
-- type: replace
-  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/providers/-
-  value:
-    name: sample
-    type: kms-plugin
-    connection_properties:
-      endpoint: /var/vcap/sys/run/kms-plugin/kms-plugin.sock
+    - type: replace
+      path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/-
+      value:
+        provider_name: sample
+        key_properties:
+          encryption_key_name: some-key-name-1
+        active: true
 
-- type: replace
-  path: /instance_groups/name=credhub/jobs/-
-  value:
-    name: kms-plugin
-    release: sample-credhub-kms-plugin
-    properties:
-      kms-plugin:
-        socket_endpoint: /var/vcap/sys/run/kms-plugin/kms-plugin.sock
+    - type: replace
+      path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/providers/-
+      value:
+        name: sample
+        type: kms-plugin
+        connection_properties:
+          endpoint: /var/vcap/sys/run/kms-plugin/kms-plugin.sock
 
-- type: replace
-  path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/provider_name=int/active
-  value: false
-```
+    - type: replace
+      path: /instance_groups/name=credhub/jobs/-
+      value:
+        name: kms-plugin
+        release: sample-credhub-kms-plugin
+        properties:
+          kms-plugin:
+            socket_endpoint: /var/vcap/sys/run/kms-plugin/kms-plugin.sock
 
+    - type: replace
+      path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/provider_name=int/active
+      value: false
+    ```
 
-Run the following command to deploy your CredHub and custom plugin.
+1. Use the BOSH CLI to log in to your BOSH Director. Run the following command:
 
-```bash
-$ bosh -d <deployment-name> credhub-manifest.yml -o ops-file.yml
-```
+    ```
+    bosh -e MY-ENV log-in
+    ```
+    Where `MY-ENV` is the name of your BOSH Director environment. For more information, see [Commands](https://bosh.io/docs/cli-v2/) in the BOSH documentation.
+
+1. Run the following command to deploy your CredHub with the plugin:
+
+    ```
+    bosh -d DEPLOYMENT-NAME credhub-manifest.yml -o OPS-FILE.yml
+    ```
+
+    Where:
+    * `DEPLOYMENT-NAME` is the name of your CredHub BOSH deployment.
+    * `OPS-FILE` is the name of your ops file.
 
 <% end %>
