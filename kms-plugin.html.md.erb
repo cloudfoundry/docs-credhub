@@ -23,7 +23,9 @@ This topic describes how to connect CredHub to a third-party Key Management Serv
 
 CredHub ships with its own internal encryption. However, you may want to use the encryption provided by a KMS instead.
 
-In order to use a KMS, you must deploy a plugin with CredHub. CredHub uses plugins that implement the KMS provider interface whose definition is in the `protobuf` format. This interface comes from Kubernetes ([here](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/)), but it is not necessary to use Kubernetes when writing a plugin. For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
+In order to use a KMS, you must deploy a plugin with CredHub. CredHub uses plugins that implement the KMS provider interface whose definition is in the `protobuf` format. For more information, see [Using a KMS provider for data encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/) in the Kubernetes documentation.
+
+The KMS interface comes from Kubernetes, but it is not necessary to use Kubernetes when writing a plugin. For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
 
 Any plugin that implements the KMS provider interface should be compatible with CredHub. Consult the documentation for your KMS provider to learn whether a plugin exists. 
 
