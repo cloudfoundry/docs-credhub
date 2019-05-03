@@ -125,11 +125,10 @@ Exit code 1
 
 #### <a name="logs"></a> Accessing Logs
 
-Pre-start logs are stored in the
+CredHub stores pre-start logs in the
 `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log` files.
 
-To troubleshoot pre-start errors, access these logs.
-You must SSH into the deployment machine or SCP the logs from the machine.
+To access these logs when troubleshooting a pre-start error, you must SSH into the CredHub VM or SCP the logs from it.
 
 ### <a id="post-start"></a>Post-Start Errors
 
@@ -163,8 +162,8 @@ Exit code 1
 The CredHub log is stored in the
 `/var/vcap/sys/log/credhub/credhub.log` file.
 
-To troubleshoot post-start errors, access these logs.
-You must SSH into the deployment machine or SCP the logs from the machine.
+To access these logs when troubleshooting a post-start error,
+you must SSH into the CredHub VM or SCP the logs from it.
 
 <p class='note'><strong>Note:</strong> The CredHub log is written according to the log
 level, <code>log_level</code>, specified in your manifest.</p>
