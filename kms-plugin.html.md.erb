@@ -22,7 +22,7 @@ This topic describes how to connect CredHub to a third-party Key Management Serv
 
 CredHub ships with its own internal encryption. However, you may want to use the encryption provided by a KMS instead.
 
-In order to use a KMS, you must deploy a plugin with CredHub. CredHub uses plugins that implement the KMS provider interface whose definition is in the `protobuf` format. For more information, see [Using a KMS provider for data encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/) in the Kubernetes documentation.
+To use a KMS, you must deploy a plugin with CredHub. CredHub uses plugins that implement the KMS provider interface whose definition is in the `protobuf` format. For more information, see [Using a KMS provider for data encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/) in the Kubernetes documentation.
 
 The KMS interface comes from Kubernetes, but it is not necessary to use Kubernetes when writing a plugin. For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
 
@@ -72,15 +72,17 @@ For an example of a BOSH release of a CredHub KMS plugin with a defined socket, 
 
 ## <a name='deploy-credhub-with-plugin'></a> Deploy CredHub with Your Plugin Release
 
-In order to deploy CredHub with your plugin, you must modify the CredHub BOSH manifest to include the new encryption provider and keys. 
+To deploy CredHub with your plugin, you must modify the CredHub BOSH manifest to include the new encryption provider and keys.
 
-You can modify the CredHub BOSH manifest with an ops file. An ops file is a YAML file that includes multiple operations to be applied to a different YAML file, such as a manifest. For more information about how to create an ops file, see [Creating Ops Files](https://bosh.io/docs/cli-ops-files/) in the BOSH documentation.
+You can modify the CredHub BOSH manifest using an ops file.
+An ops file is a YAML file that includes multiple operations to be applied to a different YAML file, such as a manifest.
+For more information about how to create an ops file, see [Creating Ops Files](https://bosh.io/docs/cli-ops-files/) in the BOSH documentation.
 
-Perform the following steps:
+To deploy CredHub with your plugin, do the following:
 
-1. Create an ops file. Consult the following example, which modifies the CredHub BOSH manifest to work with the `sample-credhub-kms-plugin`:
+1. Create an ops file. See the following example that modifies the CredHub BOSH manifest to work with `sample-credhub-kms-plugin`:
 
-    ```yaml
+    ```
     ---
     - type: replace
       path: /releases/-
@@ -118,14 +120,14 @@ Perform the following steps:
       value: false
     ```
 
-1. Use the BOSH CLI to log in to your BOSH Director. Run the following command:
+1. To log in to your BOSH Director, run the following BOSH CLI command:
 
     ```
     bosh -e MY-ENV log-in
     ```
     Where `MY-ENV` is the name of your BOSH Director environment. For more information, see [Commands](https://bosh.io/docs/cli-v2/) in the BOSH documentation.
 
-1. Run the following command to deploy your CredHub with the plugin:
+1. To deploy your CredHub with the plugin, run the following command:
 
     ```
     bosh -d DEPLOYMENT-NAME credhub-manifest.yml -o OPS-FILE.yml
