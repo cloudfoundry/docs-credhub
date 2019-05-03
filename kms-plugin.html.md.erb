@@ -98,7 +98,7 @@ To deploy CredHub with your plugin, do the following:
       value:
         provider_name: sample
         key_properties:
-          encryption_key_name: example123456
+          encryption_key_name: VALUE
         active: true
 
     - type: replace
@@ -122,6 +122,8 @@ To deploy CredHub with your plugin, do the following:
       path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/provider_name=int/active
       value: false
     ```
+
+    Where `VALUE` is your encryption key name.
 
 1. To log in to your BOSH Director, run the following BOSH CLI command:
 
