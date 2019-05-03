@@ -20,18 +20,19 @@ This topic describes how to connect CredHub to a third-party Key Management Serv
 
 ## <a name='overview'></a>Overview
 
-CredHub ships with its own internal encryption. However, you may want to use the encryption provided by a KMS instead.
+CredHub includes its own internal encryption. However, you may want to use the encryption provided by a KMS instead.
 
-To use a KMS, you must deploy a plugin with CredHub. CredHub uses plugins that implement the KMS provider interface whose definition is in the `protobuf` format.
+To use a KMS, you must deploy a plugin with CredHub. CredHub is compatible with plugins that implement the KMS provider interface defined in the `protobuf` format.
 For more information, see [Using a KMS provider for data encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/) in the Kubernetes documentation.
 
-The KMS interface comes from Kubernetes, but it is not necessary to use Kubernetes when writing a plugin. For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
+The KMS interface comes from Kubernetes, but it is not necessary to use Kubernetes when writing a plugin.
+For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
 
-Any plugin that implements the KMS provider interface should be compatible with CredHub. Consult the documentation for your KMS provider to learn whether a plugin exists. 
+Any plugin that implements the KMS provider interface should be compatible with CredHub. Consult the documentation for your KMS provider to learn if a plugin exists:
 
-If a plugin exists for your KMS provider, skip to [Build a BOSH Release](#build-a-release). 
+* If a plugin exists for your KMS provider, skip to [Build a BOSH Release](#build-a-release).
 
-If a plugin has not been created for your KMS provider, start at [Implement the Plugin](#implement).
+* If a plugin has not been created for your KMS provider, start at [Implement the Plugin](#implement).
 
 ## <a name='implement'></a>Implement the Plugin
 
@@ -54,7 +55,7 @@ service KeyManagementService {
 }
 ```
 
-For example plugins, see the following:
+For sample plugins, see the following:
 
 * [Plugin](https://github.com/pivotal/sample-credhub-kms-plugin/blob/85deb9b230a7b8c0d6a71a6d8ad1c37aa5be28ae/plugin/plugin.go) that uses Base64 encoding for encryption in the sample-credhub-kms-plugin GitHub repository
 
