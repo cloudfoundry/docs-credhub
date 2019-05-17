@@ -301,10 +301,27 @@ $ uaac member add credhub.write EXAMPLE-USER OTHER-EXAMPLE-USER
   success
 </pre>
 
-<li>Install the CredHub CLI.<br/><br><br>
+<li>Install the CredHub CLI.<br/><br>
 
 The CredHub CLI offers a simple, scriptable interface to manage stored credentials. You can download the latest release from the <a href="https://github.com/cloudfoundry-incubator/credhub-cli/releases">GitHub repository</a>.
 </li>
+
+<li>Run the following command to target the CredHub API:</br>
+
+<code>credhub api CREDHUB-API-TARGET</code></br></br>
+Where `CREDHUB-API-TARGET` is the URL to your CredHub API server.
+</li>
+
+<li>Run the following command to authenticate with CredHub:
+</br>
+<code>credhub login --client-name= CLIENT-NAME --client-secret= CLIENT-SECRET</code></br></br>
+Where:
+<ul>
+<li>`CLIENT-NAME` is the client name for UAA client grant.</li>
+<li>`CLIENT-SECRET` is the client secret for UAA client grant.</li>
+</ul>
+</li>
+
 <li>Place or generate credentials in CredHub using the CLI.</li>
 
 <pre class="terminal">
