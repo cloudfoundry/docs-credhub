@@ -82,5 +82,5 @@ See the following topics for more information about database backups:
 Database best practices dictate that you perform backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
 
 <% else %>
-<%= partial '../customizing/credhub-bbr' %>
+<%= partial '/pcf/core/#{vars.current_major_version.sub('.', '-')}/credhub-bbr' %>
 <% end %>

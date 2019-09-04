@@ -145,6 +145,6 @@ To deploy CredHub with your plugin, do the following:
 
 <% else %>
 
-<%= partial '../customizing/credhub-plugin' %>
+<%= partial "/pcf/core/#{vars.current_major_version.sub('.', '-')}/credhub-plugin" %>
 
 <% end %>
