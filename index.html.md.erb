@@ -49,7 +49,7 @@ CredHub consists of a REST API and a CLI. The REST API conforms to the Config Se
 <% if vars.product_name == 'CF' %>
 <%= partial './oss_credhub' %>
 <% else %>
-<%= partial '/pcf/core/#{vars.current_major_version.sub('.', '-')}/bosh-runtime-credhub' %>
+<%= partial "/pcf/core/#{vars.current_major_version.sub('.', '-')}/bosh-runtime-credhub" %>
 <% end %>
 
 ## <a name="cred-types"></a>CredHub Credential Types
