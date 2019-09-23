@@ -9,7 +9,7 @@ owner: CredHub
   <li><a href="#overview">Overview</a></li>
   <li><a href="#implement">Implement the Plugin</a></li>
   <li><a href="#build-a-release">Build a BOSH Release</a></li>
-  <% if vars.product_name == 'CF' %>
+  <% if vars.platform_code == 'CF' %>
   <li><a href="#deploy-credhub-with-plugin">Deploy CredHub with Your Plugin Release</a></li>
   <% else %>
   <li><a href="#build-tile">Build and Install a Tile</a></li>
@@ -72,7 +72,7 @@ Your BOSH release must run the plugin with a defined socket. You will need to re
 
 For an example of a BOSH release of a CredHub KMS plugin with a defined socket, see [sample-credhub-kms-plugin-release](https://github.com/pivotal/sample-credhub-kms-plugin-release) on GitHub.
 
-<% if vars.product_name == 'CF' %>
+<% if vars.platform_code == 'CF' %>
 
 ## <a name='deploy-credhub-with-plugin'></a> Deploy CredHub with Your Plugin Release
 
