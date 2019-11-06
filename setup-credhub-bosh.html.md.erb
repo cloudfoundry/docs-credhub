@@ -175,7 +175,8 @@ This method derives a 256-bit key from the provided encryption password and util
           type: internal
         keys:
         - provider_name: main
-          encryption_password: ((credhub-encryption-password))
+          key_properties:
+            encryption_password: ((credhub-encryption-password))
           active: true
     ...
 </pre>
