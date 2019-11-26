@@ -170,13 +170,13 @@ $ scp -i path/to/ssh-key.pem \
 #### Register HSM Client Host and Partitions
 
 <ol>
-<li>Create a client. The client hostname is the hostname of the planned CredHub instance(s).
+<li>Create a client. The client hostname is the hostname of the planned CredHub instances.
 
 <pre class="terminal">lunash:> client register -client CLIENT-NAME -hostname CLIENT-HOSTNAME</pre>
 
-If you're only planning to run one CredHub instance, it's possible to register a client with the planned CredHub IP.
+If you plan to run one CredHub instance, you can register a client with the planned CredHub IP address.
 
-<pre class="terminal">lunash:> client register -client CLIENT-NAME -ip CLIENT-IP
+<pre class="terminal">lunash:> client register -client CLIENT-NAME -ip CLIENT-IP-ADDRESS
 </pre>
 </li>
 <li>Assign the partition created in the previous section to the client.
