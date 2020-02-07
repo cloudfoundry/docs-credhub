@@ -3,12 +3,11 @@ title: CredHub
 owner: CredHub
 ---
 
-
 <div class="quick-links">
 <ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#what-can-it-do">What Can CredHub Do?</a></li>
-<li><a href="#application-architecture">Application Architecture</a></li>
+<li><a href="#application-architecture">App Architecture</a></li>
 <% if vars.platform_code == 'CF' %>
 	<li><a href="#deployment-architecture">Deployment Architecture</a>
 		<ul>
@@ -24,13 +23,17 @@ owner: CredHub
 </ul>
 </div>
 
-## <a name="overview"></a>Overview
+This topic gives an overview of the purpose and functionality of the CredHub component.
 
-CredHub is a component designed for centralized credential management in <%= vars.product_name %>. It is a single component that can address several scenarios in the <%= vars.product_name %> ecosystem. At the highest level, CredHub centralizes and secures credential generation, storage, lifecycle management, and access.
 
-## <a name="what-can-it-do"></a>What Can CredHub Do?
+## <a name="overview"></a> Overview
 
-CredHub performs a number of different functions to help generate and protect the credentials in your <%= vars.product_name %> deployment.
+CredHub is a component designed for centralized credential management in <%= vars.platform_name %>. It is a single component that can address several scenarios in the <%= vars.platform_name %> ecosystem. At the highest level, CredHub centralizes and secures credential generation, storage, lifecycle management, and access.
+
+
+## <a name="what-can-it-do"></a> What Can CredHub Do?
+
+CredHub performs a number of different functions to help generate and protect the credentials in your <%= vars.platform_name %> deployment:
 
 * Securing data for storage
 * Authentication
@@ -41,7 +44,9 @@ CredHub performs a number of different functions to help generate and protect th
 * Credential metadata
 * Credential versioning
 
-## <a name="application-architecture"></a>Application Architecture
+
+## <a name="application-architecture"></a> App Architecture
+
 CredHub consists of a REST API and a CLI. The REST API conforms to the Config Server API spec. CredHub is an OAuth2 resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation capabilities.
 
 ![Diagram shows that the CredHub CLI interacts with CredHub to export credentials to the Encryption Provider, Data Store, and Authentication Provider](images/basic-architecture.png)
@@ -52,12 +57,14 @@ CredHub consists of a REST API and a CLI. The REST API conforms to the Config Se
 <%= partial "/pcf/core/#{vars.current_major_version.sub('.', '-')}/bosh-runtime-credhub" %>
 <% end %>
 
-## <a name="cred-types"></a>CredHub Credential Types
 
-Credentials exist in multiple places in the <%= vars.product_name %> ecosystem. <%= vars.product_name %> components use credentials to authenticate connections between components. <%= vars.product_name %> installations often have hundreds of active credentials. Leaked credentials are common causes of data and security breaches, so managing them securely is very important.
+## <a name="cred-types"></a> CredHub Credential Types
 
-For more information, read <a href="./credential-types.html" class="subnav">CredHub Credential Types</a>.
+Credentials exist in multiple places in the <%= vars.platform_name %> ecosystem. <%= vars.platform_name %> components use credentials to authenticate connections between components. <%= vars.platform_name %> installations often have hundreds of active credentials. Leaked credentials are common causes of data and security breaches, so managing them securely is very important.
 
-## <a name="backup-restore"></a>Backing Up and Restoring CredHub Instances
+For more information, see [CredHub Credential Types](credential-types.html).
 
-The CredHub application does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help prevent data loss if an individual component fails. For more information, read <a href="./backup-restore.html" class="subnav">Backing Up and Restoring CredHub Instances</a>.
+
+## <a name="backup-restore"></a> Backing Up and Restoring CredHub Instances
+
+CredHub does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help prevent data loss if an individual component fails. For more information, see [Backing Up and Restoring CredHub Instances](backup-restore.html).

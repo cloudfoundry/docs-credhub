@@ -13,96 +13,105 @@ owner: CredHub
     </ul>
 </div>
 
-This topic provides details about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests.
+This topic provides information about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests.
 
-If you use [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment), include the file `credhub.yml` to enable CredHub on the BOSH Director VM.
+If you use the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment) repository on GitHub, include the file `credhub.yml` to enable CredHub on the BOSH Director VM.
+
 
 ## <a name="how-it-works"></a> How It Works
 
-CredHub exists co-located on a virtual machine (VM) with the Director, UAA, and other high-level components. A deployment manifest configured with variables calls to CredHub which then passes the credential to the appropriate components.
+CredHub exists co-located on a virtual machine (VM) with the BOSH Director, UAA, and other high-level components. A deployment manifest configured with variables calls to CredHub which then passes the credential to the appropriate components.
 
-Once configured, any variable in a BOSH deployment manifest with the syntax <code>((variable-name))</code> causes the Director to retrieve the variable value from CredHub at deploy time. You can tell your manifest already uses CredHub if fields with secure data have <code>((variables))</code> formatted with double parentheses.
+Once configured, any variable in a BOSH deployment manifest with the syntax `((variable-name))` causes the BOSH Director to retrieve the variable value from CredHub at deploy time. You can tell your manifest already uses CredHub if fields with secure data have `((variables))` formatted with double parentheses.
 
-## <a name="setup"></a> Setup Before Deployment
 
-1. Set up BOSH Director.<br/><br>
-The following configuration steps assume that you have an existing BOSH Director. If you do not have a Director, read the [initialization guide](https://bosh.io/docs/init.html) for more details.
+## <a name="setup"></a> Prepare for Deployment
+
+To prepare to deploy a BOSH Director with CredHub:
+
+1. Set up your BOSH Director.<br/><br>
+The following configuration steps assume that you have an existing BOSH Director. If you do not have a BOSH Director, see [Deploying BOSH with create-env](https://bosh.io/docs/init.html) in the BOSH documentation.
 
 1. Configure UAA on your Director.<br/><br>
-CredHub uses UAA for user and client authentication. You need a UAA server configured on the Director to enable CredHub. For more information about provisioning UAA on the Director, read [the BOSH documentation](https://bosh.io/docs/director-users-uaa.html).
+CredHub uses UAA for user and client authentication. You need a UAA server configured on the BOSH Director to enable CredHub. For more information about provisioning UAA on the BOSH Director, see [Configuring Director](https://bosh.io/docs/director-users-uaa.html) in the BOSH documentation.
 
-1. **(Optional)** Configure an external database.<br/><br>
-To optimize fault tolerance, store CredHub data in an external database. To do so, you must create a database and user on your database server before deployment. You can use the internal Director database to store CredHub data, but take care to avoid data loss when you provision or update the Director VM.
+1. (Optional) Configure an external database.<br/><br>
+To optimize fault tolerance, store CredHub data in an external database. To do so, you must create a database and user on your database server before deployment. You can use the internal BOSH Director database to store CredHub data, but take care to avoid data loss when you provision or update the BOSH Director VM.
 
-1. **(Optional)** Configure a Luna HSM.<br/><br>
+1. (Optional) Configure a Luna HSM.<br/><br>
 If you use an external Hardware Security Module (HSM) to perform cryptographic operations:
     * Configure the HSM to allow access from the deployed CredHub instance, and
     * Grant the operator all of the required permissions to use the HSM.
     <br><br>
-    For more information about the required HSM values and how to configure an HSM, read about [configuring a Luna HSM](./hsm-config.html).
+    For more information about the required HSM values and how to configure an HSM, see [Using Hardware Security Modules with CredHub](./hsm-config.html).
 
-## <a name="configure"></a> Configuring the Director
-<ol>
-<li>Update the deployment manifest to include the CredHub release. <a href="https://bosh.io/releases/github.com/pivotal-cf/credhub-release?all=1">Download the latest CredHub release from bosh.io</a>.</li>
 
-<pre>
-    releases:
-    - name: bosh
-      url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=261.2
-      version: 261.2
-      sha1: d4635b4b82b0dc5fd083b83eb7e7405832f6654b
-    # ...
-    - name: credhub # <---
-      url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=0.6.1
-      version: 0.6.1
-      sha1: 5ab4c4ef3d67f8ea07d78b1a87707e7520a97ab7
-</pre>
+## <a name="configure"></a> Configuring the BOSH Director
 
-<li>Add the CredHub job to the Director instance.</li>
+To configure your BOSH Director with CredHub:
 
-<pre>
+1. Download the latest CredHub release from the [Releases](https://github.com/pivotal/credhub-release/releases) page in the CredHub repository on GitHub.
+
+1. Update the deployment manifest to include the latest CredHub release. For example:
+
+    ```
+        releases:
+        - name: bosh
+          url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=261.2
+          version: 261.2
+          sha1: d4635b4b82b0dc5fd083b83eb7e7405832f6654b
+        # ...
+        - name: credhub
+          url: https://bosh.io/d/github.com/pivotal-cf/credhub-release?v=0.6.1
+          version: 0.6.1
+          sha1: 5ab4c4ef3d67f8ea07d78b1a87707e7520a97ab7
+    ```
+    For more information, see [Latest Version](https://bosh.io/releases/github.com/pivotal-cf/credhub-release?all=1) in _credhub Release_ in the BOSH documentation.
+
+1. Add the CredHub job to the BOSH Director instance:
+
+    ```
     instance_groups:
-    - name: bosh
-      instances: 1
-      jobs:
-      - {name: nats, release: bosh}
-      - {name: redis, release: bosh}
-      - {name: postgres, release: bosh}
-      - {name: blobstore, release: bosh}
-      - {name: director, release: bosh}
-      - {name: health_monitor, release: bosh}
-      - {name: uaa, release: uaa-release}
-      - {name: credhub, release: credhub} # <---
-      resource_pool: default
-      # ...
-</pre>
+      - name: bosh
+        instances: 1
+        jobs:
+        - {name: nats, release: bosh}
+        - {name: redis, release: bosh}
+        - {name: postgres, release: bosh}
+        - {name: blobstore, release: bosh}
+        - {name: director, release: bosh}
+        - {name: health_monitor, release: bosh}
+        - {name: uaa, release: uaa-release}
+        - {name: credhub, release: credhub}
+        resource_pool: default
+        # ...
+     ```
 
-<li><strong>(Optional)</strong> Add variable generation specifications for CredHub properties.<br/><br>
+1. (Optional) Add variable generation specifications for CredHub properties.<br/><br>
+You can generate values that CredHub requires automatically with the BOSH CLI. To enable generation, add the variable specifications to the manifest, as in the example below. You can adjust or remove these if you prefer to provide your own values.
 
-You can generate values that CredHub requires automatically with the <a href="https://github.com/cloudfoundry/bosh-cli">BOSH CLI</a>. To enable generation, add the variable specifications to the manifest as shown below. You can adjust or remove these if you prefer to provide your own values.
-</li>
-<pre>
-    variables:
-    - name: credhub-ca
-      type: certificate
-      options:
-        is_ca: true
-        common_name: 'CredHub CA'
-    - name: credhub-tls
-      type: certificate
-      options:
-        ca: credhub-ca
-        common_name: credhub.example.com
-        alternative_names:
-        - 10.0.0.10
-        - 127.0.0.1
-    - name: credhub-encryption-password
-      type: password
-</pre>
+    ```
+        variables:
+        - name: credhub-ca
+          type: certificate
+          options:
+            is_ca: true
+            common_name: 'CredHub CA'
+        - name: credhub-tls
+          type: certificate
+          options:
+            ca: credhub-ca
+            common_name: credhub.example.com
+            alternative_names:
+            - 10.0.0.10
+            - 127.0.0.1
+        - name: credhub-encryption-password
+          type: password
+    ```
 
-<li>Add CredHub properties to the deployment manifest.
+1. Add CredHub properties to the deployment manifest, as in the example below. This example includes a configuration to use a hardware security module (HSM) for encryption.
 
-<pre>
+    ```
     properties:
       credhub:
         port: 8844
@@ -112,62 +121,66 @@ You can generate values that CredHub requires automatically with the <a href="ht
           private_key: ((credhub-tls.private_key))
         data_storage:
           type: mysql
-          host: mysql.EXAMPLE.com
+          host: mysql.example.com
           port: 3306
           database: credhub
           username: user
-          password: EXAMPLE-PASSWORD
+          password: PASSWORD
           require_tls: true
           tls_ca: |
             -----BEGIN CERTIFICATE-----
             ...
             -----END CERTIFICATE-----
-        authentication:
-          uaa:
-            url: "https://uaa.example.com:8443"
-            verification_key: |
-              -----BEGIN PUBLIC KEY-----
-              ...
-              -----END PUBLIC KEY-----
-          mutual_tls:
-            trusted_cas:
-            - |
-              -----BEGIN CERTIFICATE-----
-              ...
-              -----END CERTIFICATE-----
-        encryption:
-          keys:
-          - provider_name: corp-hsm
-            encryption_key_name: KEY-NAME
-            active: true
-          providers:
-          - name: corp-hsm
-            type: hsm
-            partition: PARTITION-NAME
-            partition_password: PARTITION-PASSWORD
-            client_certificate: |
-              -----BEGIN CERTIFICATE-----
-              ...
-              -----END CERTIFICATE-----
-            client_key: |
-              -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-              ...
-              -----END EXAMPLE RSA PRIVATE KEY-----
-            servers:
-            - host: hsm.example.com
-              port: 1792
-              partition_serial_number: 123456
-              certificate: |
-                -----BEGIN CERTIFICATE-----
+          authentication:
+            uaa:
+              url: "https://uaa.example.com:8443"
+              verification_key: |
+                -----BEGIN PUBLIC KEY-----
                 ...
-                -----END CERTIFICATE-----
-</pre>
+                -----END PUBLIC KEY-----
+            mutual_tls:
+              trusted_cas:
+                - |
+                  -----BEGIN CERTIFICATE-----
+                  ...
+                  -----END CERTIFICATE-----
+            encryption:
+              keys:
+              - provider_name: corp-hsm
+                encryption_key_name: KEY-NAME
+                active: true
+              providers:
+              - name: corp-hsm
+                type: hsm
+                partition: PARTITION-NAME
+                partition_password: PARTITION-PASSWORD
+                client_certificate: |
+                  -----BEGIN CERTIFICATE-----
+                  ...
+                  -----END CERTIFICATE-----
+                client_key: |
+                  -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+                  ...
+                  -----END EXAMPLE RSA PRIVATE KEY-----
+                servers:
+                - host: hsm.example.com
+                  port: 1792
+                  partition_serial_number: 123456
+                  certificate: |
+                    -----BEGIN CERTIFICATE-----
+                    ...
+                    -----END CERTIFICATE-----
+    ```
+    Where:
+    * `PASSWORD` is the password for your CredHub instance.
+    * `KEY-NAME` is your CredHub encryption key.
+    * `PARTITION-NAME` is the name of the HSM partition on which your CredHub encryption key is stored.
+    * `PARTITION-PASSWORD` is the password of the HSM partition on which your CredHub encryption key is stored.
+    <br>
+    <br>
+    Alternatively, you can use the internal software-based encryption provider with the configuration below. This method derives a 256-bit key from the provided encryption password and utilized AES256-GCM encryption.
 
-The example above includes a configuration to use a hardware security module (HSM) for encryption. Alternatively, you can use the internal software-based encryption provider with the configuration below.</br><br>
-
-This method derives a 256-bit key from the provided encryption password and utilized AES256-GCM encryption.
-
-<pre>
+    ```
     ...
       encryption:
         providers:
@@ -178,13 +191,12 @@ This method derives a 256-bit key from the provided encryption password and util
           encryption_password: ((credhub-encryption-password))
           active: true
     ...
-</pre>
+    ```
+    For the full list of CredHub properties and default values, see [credhub job](https://bosh.io/jobs/credhub?source=github.com/pivotal-cf/credhub-release) in the BOSH documentation.
 
-For the full list of CredHub properties and default values, read the <a href="https://bosh.io/jobs/credhub?source=github.com/pivotal-cf/credhub-release">job spec properties</a>.
-</li>
-<li>Add CredHub CLI and Director/CredHub UAA clients.</li>
+1. Add CredHub CLI and your BOSH Director and CredHub UAA clients.
 
-<pre>
+    ```
     properties:
       uaa:
         clients:
@@ -195,29 +207,27 @@ For the full list of CredHub properties and default values, read the <a href="ht
             authorities: uaa.none
             access-token-validity: 120
             refresh-token-validity: 1800
-            secret: "" # <--- CLI expects this secret to be empty
+            secret: ""
           director_to_credhub:
             override: true
             authorized-grant-types: client_credentials
             scope: uaa.none
             authorities: credhub.read,credhub.write
             access-token-validity: 43200
-            secret: EXAMPLE-SECRET # <--- Replace with custom client secret
-</pre>
+            secret: CUSTOM-CLIENT-SECRET
+    ```
+    Where `CUSTOM-CLIENT-SECRET` is the client secret you set for the BOSH Director.
 
-<li>Enable the config server feature of Director and configure it to utilize CredHub.</li>
+1. Enable the configuration server feature of the BOSH Director and configure it to utilize CredHub:
 
-<pre>
+    ```
     properties:
       director:
         address: bosh.EXAMPLE.com
         name: director-name
         config_server:
           enabled: true
-
-          # URL must contain /api/ path with trailing slash
           url: "https://127.0.0.1:8844/api/"
-
           ca_cert: |
             -----BEGIN CERTIFICATE-----
             ...
@@ -230,13 +240,11 @@ For the full list of CredHub properties and default values, read the <a href="ht
               -----BEGIN CERTIFICATE-----
               ...
               -----END CERTIFICATE-----
-</pre>
+    ```
 
-<li><strong>(Optional)</strong> Configure the Director Postgres server with additional database named <code>credhub</code>.
+1. (Optional) Configure the BOSH Director Postgres server with an additional database named `credhub`. If you are using the internal BOSH Director database, you must provision an additional database for the CredHub data. If you use an external database, you must create the database on your database server before deploying.
 
-If you are using the internal Director database, you must provision an additional database for the CredHub data. If you use an external database, you must create the database on your database server before deploying.
-</li>
-<pre>
+    ```
     properties:
       postgres: &db
         host: 127.0.0.1
@@ -246,11 +254,13 @@ If you are using the internal Director database, you must provision an additiona
         database: bosh
         additional_databases: [credhub]
         adapter: postgres
-</pre>
+    ```
+    Where `POSTGRES-PASSWORD` is the password for your Postgres server.
 
-<li><strong>(Optional)</strong> Seed initial CredHub users to UAA.</li>
+1. (Optional) Seed initial CredHub users to UAA.
+    <p class='note'><strong>Note:</strong> Users must have both <code>credhub.read</code> and <code>credhub.write access</code> scopes.</p>
 
-<pre>
+    ```
     properties:
       uaa:
         scim:
@@ -258,93 +268,69 @@ If you are using the internal Director database, you must provision an additiona
           - name: CREDHUB-USER
             password: USER-PASSWORD
             groups:
-            # Users must have both credhub.read and credhub.write access
-            - credhub.read             # <---
-            - credhub.write            # <---
+            - credhub.read
+            - credhub.write
           - name: OTHER-CREDHUB-USER
             password: OTHER-USER-PASSWORD
             groups:
             - credhub.read
             - credhub.write
-</pre>
+    ```
+    Where:
+    * `CREDHUB-USER` and `OTHER-CREDHUB-USER` are the CredHub users you want to seed to UAA.
+    * `CREDHUB-PASSWORD` and `OTHER-CREDHUB-PASSWORD` are the passwords for the CredHub users you want to seed to UAA.
 
-<li>Deploy.</li>
-</ol>
+1. Deploy the BOSH Director. For more information, see [Deploying](https://bosh.io/docs/deploying/) in the BOSH documentation.
 
-## <a name="using-credhub"></a>Using CredHub
 
-<ol>
-<li>Create CredHub users in UAA.
-<br><br>
-To authenticate with CredHub to manage credentials, you must have a UAA user account with the scopes `credhub.read` and `credhub.write`. You can create users in UAA as described <a href="../uaa/uaa-user-management.html">in the UAA documentation</a>. Alternatively, you can configure UAA with an <a href="https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-LDAP.md">external LDAP provider</a>.
-<br><br>
-The example below shows how to create two users in UAA.
-</li>
-<pre class="terminal">
-$ uaac token client get admin -s example-password
-  Successfully fetched token via client credentials grant.
-  Target: https<span>:</span>//uaa.EXAMPLE.com:8443
-  Context: admin, from client admin<br/>
-$ uaac user add EXAMPLE-USER --emails email<span>@</span>example.com
-  Password:  ********
-  Verify password:  ********
-  user account successfully added<br/>
-$ uaac user add OTHER-EXAMPLE-USER --emails email<span>@</span>example.com
-  Password:  ********
-  Verify password:  ********
-  user account successfully added<br/>
-$ uaac group add credhub.read
-$ uaac member add credhub.read EXAMPLE-USER OTHER-EXAMPLE-USER
-  success<br/>
-$ uaac group add credhub.write
-$ uaac member add credhub.write EXAMPLE-USER OTHER-EXAMPLE-USER
-  success
-</pre>
+## <a name="using-credhub"></a> Using CredHub
 
-<li>Install the CredHub CLI.<br/><br>
+To use CredHub:
 
-The CredHub CLI offers a simple, scriptable interface to manage stored credentials. You can download the latest release from the <a href="https://github.com/cloudfoundry-incubator/credhub-cli/releases">GitHub repository</a>.
-</li>
+1. Create CredHub users in UAA. To authenticate with CredHub to manage credentials, you must have a UAA user account with the scopes `credhub.read` and `credhub.write`. To create users in UAA, see [Creating and Managing Users with the UAA CLI (UAAC)](uaa/uaa-user-management.html). Alternatively, you can configure UAA with an external LDAP provider. For more information, see [User Account and Authentication LDAP Integration](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-LDAP.md) in the CloudFoundry User Account and Authentication (UAA) Server repository on GitHub.
 
-<li>Run the following command to target the CredHub API:</br>
+1. Install the CredHub CLI to manage stored credentials. Download the CredHub CLI from the [Releases](https://github.com/cloudfoundry-incubator/credhub-cli/releases) page in the CredHub CLI repository on GitHub.
 
-<code>credhub api CREDHUB-API-TARGET</code></br></br>
-Where `CREDHUB-API-TARGET` is the URL to your CredHub API server.
-</li>
+1. Target the CredHub API by running:
 
-<li>Run the following command to authenticate with CredHub:
-</br>
-<code>credhub login --client-name= CLIENT-NAME --client-secret= CLIENT-SECRET</code></br></br>
-Where:
-<ul>
-<li>`CLIENT-NAME` is the client name for UAA client grant.</li>
-<li>`CLIENT-SECRET` is the client secret for UAA client grant.</li>
-</ul>
-</li>
+    ```
+    credhub api CREDHUB-API-TARGET
+    ```
+    Where `CREDHUB-API-TARGET` is the URL of your CredHub API server.
 
-<li>Place or generate credentials in CredHub using the CLI.</li>
+1. Authenticate with CredHub by running:
 
-<pre class="terminal">
-$ credhub set --type ssh --name /static/ssh_key --public ~/ssh.pub --private ~/ssh.key
-$ credhub generate --type ssh --name /generated/ssh_key
-</pre>
+    ```
+    credhub login --client-name= CLIENT-NAME --client-secret= CLIENT-SECRET
+    ```
+    Where:
+    * `CLIENT-NAME` is the name of the UAA client.
+    * `CLIENT-SECRET` is the secret for the UAA client.
 
-<li>Update BOSH deployment manifests.<br/><br>
+1. Place or generate credentials in CredHub using the CredHub CLI:
+    * To place credentials in CredHub, run:
 
-Once you have a Director that integrates with CredHub, you can update your deployment manifests to use it. The example below is of a deployment manifest using two credentials; one stored in CredHub, and one generated by CredHub. <br/><br>
+        ```
+        credhub set --type ssh --name /static/ssh_key --public ~/ssh.pub --private ~/ssh.key
+        ```
+    * To generate credentials in CredHub, run:
 
-Define credentials that you want to be generated automatically in the <code>variables</code> section.
-</li>
-<pre>
-    name: Sample-Manifest</br>
+        ```
+        credhub generate --type ssh --name /generated/ssh_key
+        ```
+
+1. Update your BOSH deployment manifests. Once you have a BOSH Director that integrates with CredHub, you can update your deployment manifests to use it. The example below is of a deployment manifest using two credentials: one stored in CredHub, and one generated by CredHub. Define credentials that you want to be generated automatically in the `variables` section.
+
+    ```
+    name: Sample-Manifest
     releases:
     - name: shell
-      url: https<span>:</span>//bosh.io/d/github.com/cloudfoundry-community/shell-boshrelease?v=3.2.0
-      sha1: 893b10af531a7519da99bb8656cc07b8277d1692</br>
-    #...</br>
+      url: https://bosh.io/d/github.com/cloudfoundry-community/shell-boshrelease?v=3.2.0
+      sha1: 893b10af531a7519da99bb8656cc07b8277d1692
+    #...
     variables:
     - name: generated/ssh\_key
-      type: ssh</br>
+      type: ssh
     jobs:
       - name: shell
         instances: 1
@@ -364,7 +350,8 @@ Define credentials that you want to be generated automatically in the <code>vari
                     ssh\_keys:
                       - ((/static/ssh\_key))
                       - ((generated/ssh\_key))
-</pre>
+    ```
+
 <% else %>
 
 <%=vars.bosh_credhub_setup%>

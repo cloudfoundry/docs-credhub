@@ -3,7 +3,6 @@ title: Using a Key Management Service with CredHub
 owner: CredHub
 ---
 
-
 <div class="quick-links">
 <ul>
   <li><a href="#overview">Overview</a></li>
@@ -19,28 +18,27 @@ owner: CredHub
 
 This topic describes how to connect CredHub to a third-party Key Management Service (KMS) using the Kubernetes API.
 
-## <a name='overview'></a>Overview
+
+## <a name='overview'></a> Overview
 
 CredHub includes its own internal encryption. However, you may want to use the encryption provided by a KMS instead.
 
-To use a KMS, you must deploy a plugin with CredHub. CredHub is compatible with plugins that implement the KMS provider interface defined in the `protobuf` format.
-For more information, see [Using a KMS provider for data encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/) in the Kubernetes documentation.
+To use a KMS, you must deploy a plugin with CredHub. CredHub is compatible with plugins that implement the KMS provider interface defined in the `protobuf` format. For more information, see [Using a KMS provider for data encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/) in the Kubernetes documentation.
 
-The KMS interface comes from Kubernetes, but it is not necessary to use Kubernetes when writing a plugin.
-For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
+The KMS interface comes from Kubernetes, but it is not necessary to use Kubernetes when writing a plugin. For more information, see [Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3) in the Google Protocol Buffers documentation.
 
-Any plugin that implements the KMS provider interface should be compatible with CredHub. Consult the documentation for your KMS provider to learn if a plugin exists:
+Any plugin that implements the KMS provider interface should be compatible with CredHub. Consult the documentation for your KMS provider to learn if a plugin exists.
 
-* If a plugin exists for your KMS provider, skip to [Build a BOSH Release](#build-a-release).
+* If a plugin exists for your KMS provider, see [Build a BOSH Release](#build-a-release).
 
-* If a plugin has not been created for your KMS provider, start at [Implement the Plugin](#implement).
+* If a plugin has not been created for your KMS provider, see [Implement the Plugin](#implement).
 
-## <a name='implement'></a>Implement the Plugin
 
-You can implement the KeyManagementService interface in any language. The example below is written in Go.
-For more information about the KeyManagementService interface, see the [sample-credhub-kms-plugin](https://github.com/pivotal/sample-credhub-kms-plugin/blob/85deb9b230a7b8c0d6a71a6d8ad1c37aa5be28ae/v1beta1/service.proto) repository on GitHub.
+## <a name='implement'></a> Implement the Plugin
 
-You must implement the following three methods:
+You can implement the KeyManagementService interface in any language. The example below is written in Go. For more information about the KeyManagementService interface, see the [sample-credhub-kms-plugin](https://github.com/pivotal/sample-credhub-kms-plugin/blob/85deb9b230a7b8c0d6a71a6d8ad1c37aa5be28ae/v1beta1/service.proto) repository on GitHub.
+
+You must implement these three methods:
 
 ```go
 // This service defines the public APIs for remote KMS provider.
@@ -56,21 +54,22 @@ service KeyManagementService {
 }
 ```
 
-For sample plugins, see the following:
+For sample plugins, see:
 
 * [Plugin](https://github.com/pivotal/sample-credhub-kms-plugin/blob/85deb9b230a7b8c0d6a71a6d8ad1c37aa5be28ae/plugin/plugin.go) that uses Base64 encoding for encryption in the sample-credhub-kms-plugin GitHub repository
 
 * [Plugin](https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apiserver/pkg/storage/value/encrypt/envelope/v1beta1/service.pb.go#L230-L255) that connects to a fake KMS in the kubernetes GitHub repository
 
-## <a name='build-a-release'></a>Build a BOSH Release
+
+## <a name='build-a-release'></a> Build a BOSH Release
 
 Because CredHub is deployed using BOSH, you must deploy the plugin as a BOSH release on the same instance group as CredHub.
 
-To create a BOSH release for your plugin, follow the procedures in [Creating a Release](https://bosh.io/docs/create-release/) in the BOSH documentation.
+To create a BOSH release for your plugin, see [Creating a Release](https://bosh.io/docs/create-release/) in the BOSH documentation.
 
-Your BOSH release must run the plugin with a defined socket. You will need to reference this socket in your CredHub BOSH manifest.
+Your BOSH release must run the plugin with a defined socket. You must reference this socket in your CredHub BOSH manifest.
 
-For an example of a BOSH release of a CredHub KMS plugin with a defined socket, see [sample-credhub-kms-plugin-release](https://github.com/pivotal/sample-credhub-kms-plugin-release) on GitHub.
+For an example of a BOSH release of a CredHub KMS plugin with a defined socket, see the [sample-credhub-kms-plugin-release](https://github.com/pivotal/sample-credhub-kms-plugin-release) repository on GitHub.
 
 <% if vars.platform_code == 'CF' %>
 
@@ -78,13 +77,11 @@ For an example of a BOSH release of a CredHub KMS plugin with a defined socket, 
 
 To deploy CredHub with your plugin, you must modify the CredHub BOSH manifest to include the new encryption provider and keys.
 
-You can modify the CredHub BOSH manifest using an ops file.
-An ops file is a YAML file that includes multiple operations to be applied to a different YAML file, such as a manifest.
-For more information about how to create an ops file, see [Creating Ops Files](https://bosh.io/docs/cli-ops-files/) in the BOSH documentation.
+You can modify the CredHub BOSH manifest using an ops file. An ops file is a YAML file that includes multiple operations to be applied to a different YAML file, such as a manifest. For more information about how to create an ops file, see [Creating Ops Files](https://bosh.io/docs/cli-ops-files/) in the BOSH documentation.
 
-To deploy CredHub with your plugin, do the following:
+To deploy CredHub with your plugin,:
 
-1. Create an ops file. See the following example that modifies the CredHub BOSH manifest to work with `sample-credhub-kms-plugin`:
+1. Create an ops file. This example modifies the CredHub BOSH manifest to work with `sample-credhub-kms-plugin`:
 
     ```
     ---
@@ -123,17 +120,16 @@ To deploy CredHub with your plugin, do the following:
       path: /instance_groups/name=credhub/jobs/name=credhub/properties/credhub/encryption/keys/provider_name=int/active
       value: false
     ```
-
     Where `VALUE` is your encryption key name.
 
-1. To log in to your BOSH Director, run the following BOSH CLI command:
+1. To log in to your BOSH Director, run:
 
     ```
-    bosh -e MY-ENV log-in
+    bosh -e ENV log-in
     ```
-    Where `MY-ENV` is the name of your BOSH Director environment. For more information, see [Commands](https://bosh.io/docs/cli-v2/) in the BOSH documentation.
+    Where `ENV` is the name of your BOSH Director environment. For more information, see [Commands](https://bosh.io/docs/cli-v2/) in the BOSH documentation.
 
-1. To deploy your CredHub with the plugin, run the following command:
+1. To deploy your CredHub with the plugin, run:
 
     ```
     bosh -d DEPLOYMENT-NAME credhub-manifest.yml -o OPS-FILE.yml
