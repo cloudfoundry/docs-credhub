@@ -260,9 +260,8 @@ To register a client host and partitions for your HSM:
     Where:
     * `CLIENT-NAME` is the name of the client.
     * `CLIENT-HOSTNAME` is the hostname of your planned CredHub instances.
-    <br>
-    <br>
-    If you are only planning to run one CredHub instance, you can also register a client with the planned CredHub IP address by running:
+
+1. (Optional) If you are only planning to run one CredHub instance, you can also register a client with the planned CredHub IP address by running:
 
     ```
     lunash:> client register -client CLIENT-NAME -ip CLIENT-IP-ADDRESS
@@ -328,13 +327,21 @@ credhub:
             certificate: HSM-CERTIFICATE
             partition_serial_number: PARTITION-SERIAL-NUMBER
 ```
+
 Where:
+
 * `ENCRYPTION-KEY-NAME` is the encryption key you set in [Set HSM Encryption Keys](#hsm-encryption-keys).
+
 * `PARTITION-NAME` is the name of the partition you created in [Create an HSM Partition](#create-hsm-partition).
+
 * `PARTITION-PASSWORD` is the password of the partition you created in [Create an HSM Partition](#create-hsm-partition).
+
 * `CLIENT-CERTIFICATE` is the client certificate you created in [Establish a Network Trust Link Between Client and HSMs](#establish-network-trust-link).
+
 * `CLIENT-PRIVATE-KEY` is the private key you created in [Establish a Network Trust Link Between Client and HSMs](#establish-network-trust-link).
+
 * `HSM-CERTIFICATE` is one of the HSM certificates you retrieved in [Retrieve HSM Certificate](#retrieve-hsm-certificate).
+
 * `PARTITION-SERIAL-NUMBER` is the partition serial number you retrieved in [Create an HSM Partition](#create-hsm-partition).
 
 
