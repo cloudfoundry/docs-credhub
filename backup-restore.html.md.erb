@@ -9,7 +9,15 @@ owner: CredHub
         <li><a href="#overview">Overview</a></li>
         <li><a href="#deployment-manifest">Back Up the Deployment Manifest</a></li>
         <li><a href="#encryption-keys">Back Up the Encryption Keys</a></li>
+            <ul>
+                <li><a href="internal">Internal</a></li>
+                <li><a href="luna-hsm">Luna HSM</a></li>
+                <li><a href="encryption-frequency">Frequency</a></li>
+            </ul>
         <li><a href="#database">Back Up the Database</a></li>
+            <ul>
+                <li><a href="db-frequency">Frequency</a></li>
+            </ul>
     </ul>
 </div>
 
@@ -51,13 +59,13 @@ Where:
 
 The process for backing up CredHub encryption keys differs based on the encryption provider you use. CredHub supports internal providers and Luna HSM.
 
-### <a id='internal'></a> Internal
+### <a name="internal"></a> Internal
 
 The internal provider performs encryption and decryption operations using a symmetrical AES key. This key is a hexadecimal value provided to the app during deployment.
 
 Store the key in a secure place so you can use it in a future recovery deployment.
 
-### <a id='luna-hsm'></a> Luna HSM
+### <a name="luna-hsm"></a> Luna HSM
 
 Luna Hardware Security Modules (HSMs) do not support traditional data export. HSMs are designed not to release key material once it is placed on the device.
 
@@ -73,7 +81,7 @@ CredHub supports management and integration with a high availability (HA) Luna H
 
 If you use a Luna HSM from AWS, see [What Is AWS CloudHSM?](http://docs.aws.amazon.com/cloudhsm/latest/userguide/configuring-ha.html) in the AWS documentation.
 
-### <a id='encryption-frequency'></a> Frequency
+### <a name="encryption-frequency"></a> Frequency
 
 Back up the encryption keys whenever you rotate them to ensure that you always have access to the latest value.
 
@@ -88,7 +96,7 @@ CredHub stores the majority of its stateful data in the configured database. Thi
 
 For more information about database backups, see [Chapter 7 Backup and Recovery](http://dev.mysql.com/doc/refman/5.7/en/backup-and-recovery.html) in the MySQL documentation and [Chapter 24. Backup and Restore](https://www.postgresql.org/docs/9.5/static/backup.html) in the PostgreSQL documentation.
 
-### <a id='db-frequency'></a> Frequency
+### <a name="db-frequency"></a> Frequency
 
 Database best practices dictate that you perform backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
 
