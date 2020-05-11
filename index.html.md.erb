@@ -25,15 +25,15 @@ owner: CredHub
 
 This topic gives an overview of the purpose and functionality of the CredHub component.
 
+CredHub is a component designed for centralized credential management in <%= vars.platform_name %>. It is a single
+component that can address several scenarios in the <%= vars.platform_name %> ecosystem. At the highest level, CredHub
+centralizes and secures credential generation, storage, lifecycle management, and access.
 
-## <a name="overview"></a> Overview
 
-CredHub is a component designed for centralized credential management in <%= vars.platform_name %>. It is a single component that can address several scenarios in the <%= vars.platform_name %> ecosystem. At the highest level, CredHub centralizes and secures credential generation, storage, lifecycle management, and access.
+## <a name="what-can-it-do"></a> Functions
 
-
-## <a name="what-can-it-do"></a> What Can CredHub Do?
-
-CredHub performs a number of different functions to help generate and protect the credentials in your <%= vars.platform_name %> deployment:
+CredHub performs a number of different functions to help generate and protect the credentials in your
+<%= vars.platform_name %> deployment:
 
 * Securing data for storage
 * Authentication
@@ -44,10 +44,11 @@ CredHub performs a number of different functions to help generate and protect th
 * Credential metadata
 * Credential versioning
 
-
 ## <a name="application-architecture"></a> App Architecture
 
-CredHub consists of a REST API and a CLI. The REST API conforms to the Config Server API spec. CredHub is an OAuth2 resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation capabilities.
+CredHub consists of a REST API and a CLI. The REST API conforms to the Config Server API spec. CredHub is an OAuth2
+resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation
+capabilities.
 
 ![Diagram shows that the CredHub CLI interacts with CredHub to export credentials to the Encryption Provider, Data Store, and Authentication Provider](images/basic-architecture.png)
 
@@ -67,7 +68,8 @@ Leaked credentials are common causes of data and security breaches, so managing 
 
 For more information, see [CredHub Credential Types](credential-types.html).
 
-
 ## <a name="backup-restore"></a> Backing Up and Restoring CredHub Instances
 
-CredHub does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help prevent data loss if an individual component fails. For more information, see [Backing Up and Restoring CredHub Instances](backup-restore.html).
+CredHub does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help
+prevent data loss if an individual component fails. For more information, see
+[Backing Up and Restoring CredHub Instances](backup-restore.html).
