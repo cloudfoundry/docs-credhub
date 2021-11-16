@@ -55,7 +55,7 @@ capabilities.
 <% if vars.platform_code == 'CF' %>
 <%= partial './oss_credhub' %>
 <% else %>
-<%= partial "/pcf/core/#{vars.current_major_version.sub('.', '-')}/bosh-runtime-credhub" %>
+<%= partial "/pcf/core/2-12/bosh-runtime-credhub" %>
 <% end %>
 
 
