@@ -101,5 +101,7 @@ For more information about database backups, see [Chapter 7 Backup and Recovery]
 Database best practices dictate that you perform backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
 
 <% else %>
-<%= partial "/pcf/core/2-12/credhub-bbr" %>
+In <%= vars.app_runtime_full %>, you can back up CredHub and its data with BOSH Backup and Restore (BBR). For more information, see <em>Backing Up and Restoring Deployments</em> in the CredHub documentation.
+
+Ensure you also back up your encryption key. If you do not back up your encryption key, you cannot restore your BBR backups. For more information, see [Back Up the Encryption Keys](#encryption-keys).
 <% end %>
