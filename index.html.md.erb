@@ -55,7 +55,38 @@ capabilities.
 <% if vars.platform_code == 'CF' %>
 <%= partial './oss_credhub' %>
 <% else %>
-<%= partial "/pcf/core/2-12/bosh-runtime-credhub" %>
+## <a name="pcfcredhub"></a> CredHub in <%= vars.platform_name %>
+
+A <%= vars.platform_name %> deployment stores credentials in these locations:
+
+* **BOSH CredHub**: Colocated with the BOSH Director on a single VM. This CredHub instance stores credentials for the BOSH Director.
+
+* **Runtime CredHub**: Deployed as an independent service and stores service instance credentials.
+
+### <a name="bosh"></a> BOSH CredHub
+
+In <%= vars.platform_name %>, the BOSH Director VM includes a CredHub job. This provides a lightweight credential storage instance for the BOSH Director. The BOSH Director, <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>), and other tiles store credentials in BOSH CredHub. For more information, see _Retrieve Credentials Stored in BOSH CredHub_ in _Retrieving Credentials from Your Deployment_.
+
+<p class="note"><strong>Note:</strong> This configuration does not provide high availability.</p>
+
+In this colocated deployment architecture, the BOSH Director, CredHub, UAA, and the BOSH Director database are all installed on a single BOSH VM, as shown in the diagram below:
+
+![Diagram that show the following components colocated on the BOSH VM: BOSH Director, CredHub, UAA, and the BOSH Director database](images/bosh-deployment.png)
+
+### <a name="runtime"></a> Runtime CredHub
+
+The <%= vars.app_runtime_abbr %> tile deploys CredHub as an independent service on its own VM. This provides a highly available credential storage instance for securing service instance credentials. For more information, see [Securing Service Instance Credentials with Runtime CredHub](https://docs.pivotal.io/application-service/2-12/operating/secure-si-creds.html).
+
+CredHub is a stateless app, so you can scale it to multiple instances that share a common database cluster and encryption provider.
+
+With CredHub as a service, the load balancer and external databases communicate directly with the CredHub VMs, as shown in the diagram below:
+
+![Diagram that shows multiple CredHub VMs that connect to UAA, an HSM, an external database, and a load balancer. The load balancer connects to four consumer VMs.](images/service-deployment.png)
+
+
+## <a id='store-creds'></a> Using CredHub to Store Credentials for Service Tiles
+
+If you develop a service tile for <%= vars.platform_name %> and want to store its credentials in BOSH CredHub, see [CredHub](https://docs.pivotal.io/tiledev/credhub.html) in _<%= vars.platform_name %> Tile Developer Guide_.
 <% end %>
 
 
