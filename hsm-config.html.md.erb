@@ -54,9 +54,12 @@ To create new AWS CloudHSMs:
     ```
     ssh-keygen -b 4096 -t rsa -N PASSWORD -f PATH-TO-SSH-KEY.pem
     ```
+
     Where:
-    * `PASSWORD` is the password you create for the SSH key.
-    * `PATH-TO-SSH-KEY` is the filepath of your SSH key PEM file.
+    <ul>
+      <li><code>PASSWORD</code> is the password you create for the SSH key.</li>
+      <li><code>PATH-TO-SSH-KEY</code> is the filepath of your SSH key PEM file.</li>
+    </ul>
 
 1. Create the `cloudhsm.conf` file with these values:
 
@@ -65,10 +68,13 @@ To create new AWS CloudHSMs:
     aws_secret_access_key=SECRET-ACCESS-KEY
     aws_region=AWS-REGION
     ```
+
     Where:
-    * `ACCESS-KEY-ID` is your AWS access key ID.
-    * `SECRET-ACCESS-KEY` is your AWS secret access key.
-    * `AWS-REGION` is your AWS region.
+    <ul>
+      <li><code>ACCESS-KEY-ID</code> is your AWS access key ID.</li>
+      <li><code>SECRET-ACCESS-KEY</code> is your AWS secret access key.</li>
+      <li><code>AWS-REGION</code> is your AWS region.</li>
+    </ul>
 
 1. To create each HSM and place it in the appropriate subnet, run:
 
@@ -79,11 +85,14 @@ To create new AWS CloudHSMs:
       --ssh-public-key-file PATH-TO-SSH-KEY.pem.pub \
       --iam-role-arn IAM-HSN-ROLE-ARN
     ```
+
     Where:
-    * `PATH-TO-CLOUDHSM` is the filepath to your `cloudhsm.conf` file.
-    * `SUBNET-ID` is the ID of the subnet in which you want to place your HSM.
-    * `PATH-TO-SSH-KEY` is the filepath to your public SSH key PEM key.
-    * `IAM-HSM-ROLE-ARN` is the Amazon Resource Name (ARN) of your HSM's IAM role. For more information, see [IAM ARNs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns) in _IAM Identifiers_ in the AWS documentation.
+    <ul>
+      <li><code>PATH-TO-CLOUDHSM</code> is the filepath to your <code>cloudhsm.conf</code> file.</li>
+      <li><code>SUBNET-ID</code> is the ID of the subnet in which you want to place your HSM.</li>
+      <li><code>PATH-TO-SSH-KEY</code> is the filepath to your public SSH key PEM key.</li>
+      <li><code>IAM-HSM-ROLE-ARN</code> is the Amazon Resource Name (ARN) of your HSM&#39;s IAM role. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns">IAM ARNs</a> in <em>IAM Identifiers</em> in the AWS documentation.</li>
+    </ul>
 
 1. Assign the security group to each HSM:
     1. Retrieve the Elastic Network Interface ID `EniID` of the HSM by running:
@@ -91,9 +100,12 @@ To create new AWS CloudHSMs:
         ```
         cloudhsm describe-hsm -H HSM-ARN -r AWS-REGION
         ```
+
         Where:
-        * `HSM-ARN` is the ARN of your HSM.
-        * `AWS-REGION` is the AWS region of your HSM.
+        <ul>
+          <li><code>HSM-ARN</code> is the ARN of your HSM.</li>
+          <li><code>AWS-REGION</code> is the AWS region of your HSM.</li>
+        </ul>
     1. Edit the network interface to assign the security group by running:
 
         ```
@@ -101,10 +113,12 @@ To create new AWS CloudHSMs:
           --network-interface-id ENI-ID \
           --groups SECURITY-GROUP-ID
         ```
-        Where:
-        * `ENI-ID` is the `EniID` you retrived in the previous step.
-        * `SECURITY-GROUP-ID` is the ID of the security group you want to assign to this HSM.
 
+        Where:
+        <ul>
+          <li><code>ENI-ID</code> is the <code>EniID</code> you retrived in the previous step.</li>
+          <li><code>SECURITY-GROUP-ID</code> is the ID of the security group you want to assign to this HSM.</li>
+        </ul>
 
 ## <a id="initialize-and-configure"></a> Initialize and Configure New HSMs
 
@@ -119,9 +133,12 @@ To SSH onto the HSM you want to initialize and configure:
     ```
     cloudhsm describe-hsm -H HSM-ARN -r AWS-REGION
     ```
+
     Where:
-    * `HSM-ARN` is the ARN of your HSM.
-    * `AWS-REGION` is the AWS region of your HSM.
+    <ul>
+      <li><code>HSM-ARN</code> is the ARN of your HSM.</li>
+      <li><code>AWS-REGION</code> is the AWS region of your HSM.</li>
+    </ul>
 
 1. SSH onto the HSM by running:
 
@@ -198,9 +215,12 @@ To create an HSM partition to hold the encryption keys:
     ```
     lunash:> partition create -partition PARTITION-NAME -domain CLONING-DOMAIN
     ```
+
     Where:
-    * `PARTITION-NAME` is the name you give the partition.
-    * `CLONING-DOMAIN` is the cloning domain of the HSM.
+    <ul>
+      <li><code>PARTITION-NAME</code> is the name you give the partition.</li>
+      <li><code>CLONING-DOMAIN</code> is the cloning domain of the HSM.</li>
+    </ul>
 
 1. When prompted to do so, create a password for the partition. The partition password must be the same for all partitions in the highly available partition group.
 
@@ -235,9 +255,12 @@ To establish a network trust link between a client and your HSMs:
       -keyout CLIENT-HOSTNAME-OR-IP.pem \
       -out    CLIENT-HOSTNAME-OR-IP.pem
     ```
+
     Where:
-    * `NUMBER-OF-DAYS` is the number of days you want the network trust link to be valid.
-    * `CLIENT-HOSTNAME-OR-IP` is the hostname or IP address of the client.
+    <ul>
+      <li><code>NUMBER-OF-DAYS</code> is the number of days you want the network trust link to be valid.</li>
+      <li><code>CLIENT-HOSTNAME-OR-IP</code> is the hostname or IP address of the client.</li>
+    </ul>
 
 1. Copy the client certificate to your HSM by running:
 
@@ -257,27 +280,36 @@ To register a client host and partitions for your HSM:
     ```
     lunash:> client register -client CLIENT-NAME -hostname CLIENT-HOSTNAME
     ```
+
     Where:
-    * `CLIENT-NAME` is the name of the client.
-    * `CLIENT-HOSTNAME` is the hostname of your planned CredHub instances.
+    <ul>
+      <li><code>CLIENT-NAME</code> is the name of the client.</li>
+      <li><code>CLIENT-HOSTNAME</code> is the hostname of your planned CredHub instances.</li>
+    </ul>
 
 1. (Optional) If you are only planning to run one CredHub instance, you can also register a client with the planned CredHub IP address by running:
 
     ```
     lunash:> client register -client CLIENT-NAME -ip CLIENT-IP-ADDRESS
     ```
+
     Where:
-    * `CLIENT-NAME` is the name of the client.
-    * `CLIENT-IP-ADDRESS` is the IP address of your planned CredHub instance.
+    <ul>
+      <li><code>CLIENT-NAME</code> is the name of the client.</li>
+      <li><code>CLIENT-IP-ADDRESS</code> is the IP address of your planned CredHub instance.</li>
+    </ul>
 
 1. Assign the partition created in the previous section to the client by running:
 
     ```
     lunash:> client assignPartition -client CLIENT-NAME -partition PARTITION-NAME
     ```
+
     Where:
-    * `CLIENT-NAME` is the name of the client.
-    * `PARTITION-NAME` is the name of the partition you created.
+    <ul>
+      <li><code>CLIENT-NAME</code> is the name of the client.</li>
+      <li><code>PARTITION-NAME</code> is the name of the partition you created.</li>
+    </ul>
 
 
 ## <a id="hsm-encryption-keys"></a> Set HSM Encryption Keys
@@ -362,9 +394,12 @@ The generated client certificate has a fixed expiration date after which the HSM
       -keyout CLIENT-HOSTNAME-OR-IPKey.pem \
       -out    CLIENT-HOSTNAME-OR-IP.pem
     ```
+
     Where:
-    * `NUMBER-OF-DAYS` is the number of days you want the network trust link to be valid.
-    * `CLIENT-HOSTNAME-OR-IP` is the hostname or IP address of the client.
+    <ul>
+      <li><code>NUMBER-OF-DAYS</code> is the number of days you want the network trust link to be valid.</li>
+      <li><code>CLIENT-HOSTNAME-OR-IP</code> is the hostname or IP address of the client.</li>
+    </ul>
 
 1. Copy the client certificate to each HSM by running:
 
@@ -395,18 +430,24 @@ The generated client certificate has a fixed expiration date after which the HSM
     ```
     lunash:> client register -client CLIENT-NAME -ip CLIENT-IP
     ```
+
     Where:
-    * `CLIENT-NAME` is the name of the client.
-    * `CLIENT-IP` is the IP address of the client.
+    <ul>
+      <li><code>CLIENT-NAME</code> is the name of the client.</li>
+      <li><code>CLIENT-IP</code> is the IP address of the client.</li>
+    </ul>
 
 1. Re-assign partition assignments by running:
 
     ```
     lunash:> client assignPartition -client CLIENT-NAME -partition PARTITION-NAME
     ```
+
     Where:
-    * `CLIENT-NAME` is the name of the client.
-    * `PARTITION-NAME` is the name of the partition to which the client is assigned.
+    <ul>
+      <li><code>CLIENT-NAME</code> is the name of the client.</li>
+      <li><code>PARTITION-NAME</code> is the name of the partition to which the client is assigned.</li>
+    </ul>
 
 1. (Optional) Validate the new certificate fingerprint by running:
 
