@@ -3,26 +3,6 @@ title: CredHub
 owner: CredHub
 ---
 
-<div class="quick-links">
-<ul>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#what-can-it-do">What Can CredHub Do?</a></li>
-<li><a href="#application-architecture">App Architecture</a></li>
-<% if vars.platform_code == 'CF' %>
-	<li><a href="#deployment-architecture">Deployment Architecture</a>
-		<ul>
-			<li><a href="#colocated">Colocated with the BOSH Director</a></li>
-			<li><a href="#service">Deployed as a Service</a></li>
-		</ul>
-	</li>
-<% else %>
-	<%= vars.credhub_index_menu %>
-<% end %>
-<li><a href="#cred-types">CredHub Credential Types</a></li>
-<li><a href="#backup-restore">Backing Up and Restoring CredHub Instances</a></li>
-</ul>
-</div>
-
 This topic gives an overview of the purpose and functionality of the CredHub component.
 
 CredHub is a component designed for centralized credential management in <%= vars.platform_name %>. It is a single
@@ -30,7 +10,7 @@ component that can address several scenarios in the <%= vars.platform_name %> ec
 centralizes and secures credential generation, storage, lifecycle management, and access.
 
 
-## <a name="what-can-it-do"></a> Functions
+## <a id="what-can-it-do"></a> Functions
 
 CredHub performs a number of different functions to help generate and protect the credentials in your
 <%= vars.platform_name %> deployment:
@@ -44,7 +24,7 @@ CredHub performs a number of different functions to help generate and protect th
 * Credential metadata
 * Credential versioning
 
-## <a name="application-architecture"></a> App Architecture
+## <a id="application-architecture"></a> App Architecture
 
 CredHub consists of a REST API and a CLI. CredHub is an OAuth2
 resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation
@@ -55,7 +35,7 @@ capabilities.
 <% if vars.platform_code == 'CF' %>
 <%= partial './oss_credhub' %>
 <% else %>
-## <a name="pcfcredhub"></a> CredHub in <%= vars.platform_name %>
+## <a id="pcfcredhub"></a> CredHub in <%= vars.platform_name %>
 
 A <%= vars.platform_name %> deployment stores credentials in these locations:
 
@@ -63,7 +43,7 @@ A <%= vars.platform_name %> deployment stores credentials in these locations:
 
 * **Runtime CredHub**: Deployed as an independent service and stores service instance credentials.
 
-### <a name="bosh"></a> BOSH CredHub
+### <a id="bosh"></a> BOSH CredHub
 
 In <%= vars.platform_name %>, the BOSH Director VM includes a CredHub job. This provides a lightweight credential storage instance for the BOSH Director. The BOSH Director, <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>), and other tiles store credentials in BOSH CredHub. For more information, see _Retrieve Credentials Stored in BOSH CredHub_ in _Retrieving Credentials from Your Deployment_.
 
@@ -73,7 +53,7 @@ In this colocated deployment architecture, the BOSH Director, CredHub, UAA, and 
 
 ![Diagram that show the following components colocated on the BOSH VM: BOSH Director, CredHub, UAA, and the BOSH Director database](images/bosh-deployment.png)
 
-### <a name="runtime"></a> Runtime CredHub
+### <a id="runtime"></a> Runtime CredHub
 
 The <%= vars.app_runtime_abbr %> tile deploys CredHub as an independent service on its own VM. This provides a highly available credential storage instance for securing service instance credentials. For more information, see [Securing Service Instance Credentials with Runtime CredHub](https://docs.pivotal.io/application-service/2-12/operating/secure-si-creds.html).
 
@@ -90,7 +70,7 @@ If you develop a service tile for <%= vars.platform_name %> and want to store it
 <% end %>
 
 
-## <a name="cred-types"></a> CredHub Credential Types
+## <a id="cred-types"></a> CredHub Credential Types
 
 Credentials exist in multiple places.
 Components use credentials to authenticate connections between components.
@@ -99,7 +79,7 @@ Leaked credentials are common causes of data and security breaches, so managing 
 
 For more information, see [CredHub Credential Types](credential-types.html).
 
-## <a name="backup-restore"></a> Backing Up and Restoring CredHub Instances
+## <a id="backup-restore"></a> Backing Up and Restoring CredHub Instances
 
 CredHub does not hold state, but you must ensure its dependent components are backed up. Redundant backups can help
 prevent data loss if an individual component fails. For more information, see
