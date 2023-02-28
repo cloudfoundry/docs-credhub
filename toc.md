@@ -1,3 +1,7 @@
+---
+title: CredHub
+---
+
 *   [CredHub](/docs-credhub/index.html)
 *   [CredHub Credential Types](/docs-credhub/credential-types.html)
 *   [Backing Up and Restoring CredHub Instances](/docs-credhub/backup-restore.html)
