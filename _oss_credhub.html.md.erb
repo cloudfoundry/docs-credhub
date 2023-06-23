@@ -1,23 +1,31 @@
-## <a id="deployment-architecture"></a> Deployment Architecture
+## <a id="deployment-architecture"></a> Deployment architecture
 
-The two primary architectures for CredHub are either colocated on the BOSH Director VM or deployed and managed independently as a service. You can choose your method depending on the needs of your organization.
+The primary architectures for CredHub are either colocated on the BOSH Director VM or
+deployed and managed independently as a service. You can choose your method depending on the needs of your
+organization.
 
-### <a id="colocated"></a> Colocated with the BOSH Director
+### <a id="colocated"></a> Colocated deployment with BOSH Director
 
-You can deploy CredHub on the same VM as the BOSH Director. If you need a lightweight credential storage instance for the BOSH Director only, you may choose the colocated deployment. This configuration does not provide high availability.
+You can deploy CredHub on the same VM as the BOSH Director. If you need a
+lightweight credential storage instance for the BOSH Director only, you might choose a colocated deployment.
 
-When you use the colocated deployment architecture, the BOSH Director, CredHub, UAA, and the BOSH Director database are all installed on a single BOSH VM, as shown in this diagram:
+This configuration does not provide high availability.
 
-![Diagram that show the following components colocated on the BOSH VM: BOSH Director, CredHub, UAA, and the BOSH Director database](images/bosh-deployment.png)
+When you use a colocated deployment architecture, the BOSH Director, CredHub, UAA, and the BOSH Director database are all installed on a single BOSH VM, as shown in this diagram:
 
-For more information, see [Setting Up and Deploying CredHub with BOSH](setup-credhub-bosh.html).
+![alt-text="Diagram that show the following components colocated on the BOSH VM: BOSH Director, CredHub, UAA, and the BOSH Director database"](./images/bosh-deployment.png)
 
-### <a id="service"></a> Deployed as a Service
+For more information, see [Setting up and deploying CredHub with BOSH](setup-credhub-bosh.html).
 
-You can deploy CredHub as an independent service on one or more VMs. If you need a highly-available credential storage instance for multiple components in your deployment, you may choose to deploy CredHub as a service.
+### <a id="service"></a> Deploying as a service
 
-CredHub is a stateless app, so you can scale it to multiple instances that share a common database cluster and encryption provider.
+You can deploy CredHub as an independent service on one or more VMs. If you need a highly available credential storage instance for multiple components in your deployment, you might choose to deploy CredHub as a service.
 
-When you deploy CredHub as a service, the load balancer and external databases communicate directly with the CredHub VMs, as shown in this diagram:
+CredHub is a stateless app, so you can scale it to multiple instances that share a common
+database cluster and encryption provider.
 
-![Diagram that shows multiple CredHub VMs that connect to UAA, an HSM, an external database, and a load balancer. The load balancer connects to four consumer VMs.](images/service-deployment.png)
+When you deploy CredHub as a service, the load balancer and external databases communicate
+directly with the CredHub VMs, as shown in this diagram:
+
+![alt-text="Diagram that shows multiple CredHub VMs that connect to UAA, an HSM, an external database, and a load balancer. The load balancer connects to four consumer VMs."](./images/service-deployment.png)
+

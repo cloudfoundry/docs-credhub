@@ -3,22 +3,24 @@ title: Troubleshooting CredHub
 owner: CredHub
 ---
 
-This topic provides guidance for resolving errors that may occur when you deploy, upgrade, or interact with CredHub.
+You can resolve errors that might occur when you deploy, upgrade, or interact with CredHub.
 
-
-## <a id='deployment-failures'></a> Deployment Failures
+## <a id='deployment-failures'></a> Deployment failures
 
 CredHub deployment failures include:
 
 * Configuration errors
-* Pre-start errors
-* Post-start errors
+* Pre start errors
+* Post start errors
 
-For additional information about troubleshooting CredHub deployment failures, see [Error List](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list) in _Troubleshooting Guide_ in the CredHub repository on GitHub.
+For additional information about troubleshooting CredHub deployment failures,
+see [Error List](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list) in _Troubleshooting Guide_ in the CredHub repository on GitHub.
 
-### <a id="config"></a> Configuration Errors
+### <a id="config"></a> Configuration errors
 
-Configuration errors occur before CredHub deploys. For example:
+Configuration errors occur before CredHub deploys.
+
+For example:
 
 <pre class="terminal">
 Using deployment 'credhub'
@@ -29,11 +31,13 @@ Evaluating manifest:
 Exit code 1
 </pre>
 
-Configuration errors start with `yaml` and occur before the BOSH task is created. They indicate an error in parsing your manifest.
+Configuration errors start with `yaml` and occur before the BOSH task is created. They indicate an
+error in parsing your manifest.
 
-To correct a configuration error, review the structure of your manifest at the line specified in the error message to ensure its format and indentation are valid.
+To correct a configuration error, review the structure of your manifest at the line specified in the
+error message to ensure the format and indentation are valid.
 
-Additionally, you may see the following error format:
+Additionally, you might see the following error format:
 
 <pre class="terminal">
 Task 474
@@ -57,13 +61,14 @@ Updating deployment:
 Exit code 1
 </pre>
 
-This error occurs when a required field is not defined in the manifest. In the example above, the following configuration value is missing:
+This error occurs when a required field is not defined in the manifest. In the previous example,
+the following configuration value is missing:
 
 ```
 Can't find property '["credhub.data_storage.type"]'
 ```
 
-Missing or invalid values may cause another similar error:
+Missing or invalid values might cause another similar error:
 
 <pre class="terminal">
 Task 697
@@ -87,11 +92,11 @@ Updating deployment:
 Exit code 1
 </pre>
 
-When troubleshooting this error, use the line number and the template specified in the error message to identify the missing or invalid value.
+When you are troubleshooting this error, use the line number and the template specified in the error message to identify the missing or invalid value.
 
-### <a id="pre-start"></a> Pre-Start Errors
+### <a id="pre-start"></a> Pre Start errors
 
-Pre-start errors occur when CredHub is unable to perform pre-start tasks. For example:
+Pre start errors occur when CredHub is unable to perform pre start tasks. For example:
 
 <pre class="terminal">
 Task 789
@@ -115,15 +120,15 @@ Updating deployment:
 Exit code 1
 </pre>
 
-#### <a name="logs"></a> Accessing Logs
+#### <a name="logs"></a> Accessing logs
 
-CredHub stores pre-start logs in the `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log` files.
+CredHub stores pre start logs in the `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log` files.
 
-To access these logs when troubleshooting a pre-start error, you must SSH into the CredHub VM or SCP the logs from it.
+To access these logs when you are troubleshooting a pre start error, you must SSH into the CredHub VM or SCP the logs from it.
 
-### <a id="post-start"></a> Post-Start Errors
+### <a id="post-start"></a> Post Start errors
 
-Post-start errors occur when a post-start script fails. For example:
+Post start errors occur when a post start script fails. For example:
 
 <pre class="terminal">
 Task 478
@@ -147,21 +152,21 @@ Updating deployment:
 Exit code 1
 </pre>
 
-#### <a name="app-logs"></a> Accessing Logs
+#### <a name="app-logs"></a> Accessing logs
 
 The CredHub log is stored in the `/var/vcap/sys/log/credhub/credhub.log` file.
 
-To access these logs when troubleshooting a post-start error, you must SSH into the CredHub VM or SCP the logs from it.
+To access these logs when you are troubleshooting a post start error, you must SSH into the CredHub VM or SCP the logs from it.
 
-<p class='note'><strong>Note:</strong> The CredHub log is written according to the log level, <code>log_level</code>, specified in your manifest.</p>
+<p class='note'><strong>Note:</strong> The CredHub log is written according to the  <code>log_level</code> variable, specified in your manifest.</p>
 
-To locate the cause of the failure, search for `ERROR` in the logs. Because Monit attempts to restart a failing CredHub process, you may see multiple instances of the same error.
+To locate the cause of the failure, search for `ERROR` in the logs. Because Monit attempts to restart a failing CredHub process, you might see multiple instances of the same error.
 
 Additionally, you can review other log files in the `/var/vcap/sys/log/credhub` directory.
 
 
-## <a id="usability-failures"></a> Usability Failures
+## <a id="usability-failures"></a> Usability failures
 
-Usability failures occur after a successful deployment of CredHub. If you receive an internal server error without a descriptive error message, review the CredHub log as described in [Accessing Logs](#app-logs).
+Usability failures occur after a successful deployment of CredHub. If you receive an internal server error without a descriptive error message, review the CredHub log as described in [Accessing logs](#app-logs).
 
 For additional information about troubleshooting usability failures, see [Error List](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list-1) in _Troubleshooting Guide_ in the CredHub repository on GitHub.
