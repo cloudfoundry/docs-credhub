@@ -58,7 +58,7 @@ In this colocated deployment architecture, the BOSH Director, CredHub, UAA, and 
 
 ### <a id="runtime"></a> Runtime CredHub
 
-The <%= vars.app_runtime_abbr %> tile deploys CredHub as an independent service on its own VM. This provides a highly available credential storage instance for securing service instance credentials. For more information, see [Securing Service Instance Credentials with Runtime CredHub](../operating/secure-si-creds.html).
+The <%= vars.app_runtime_abbr %> tile deploys CredHub as an independent service on its own VM. This provides a highly available credential storage instance for securing service instance credentials. 
 
 CredHub is a stateless app, so you can scale it to multiple instances that share a common database cluster and encryption provider.
 
