@@ -5,10 +5,13 @@ owner: CredHub
 
 You can configure [AWS CloudHSM](https://aws.amazon.com/cloudhsm) devices to work with CredHub.
 
-<p class="note"><strong>Note:</strong> If you use a <a href="https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/safenet-network-hsm/">Luna SafeNet HSM</a>, rather than AWS, skip over the device allocation portion of the documentation, and start with <a href="#initialize-and-configure">Initialize and Configure New HSMs</a>.</p>
+<p class="note important">
+<span class="note__title">Important</span> If you use a <a href="https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/safenet-network-hsm/">Luna SafeNet HSM</a>,
+rather than AWS, skip over the device allocation portion of the documentation, and start with
+<a href="#initialize-and-configure">Initialize and Configure New HSMs</a>.
+</p>
 
 If you store critical data in CredHub, configuring at least two Hardware Security Modules (HSMs) replicates your keys and provides redundancy and security in the event of an HSM failure. With a single HSM, device failure renders your CredHub data inaccessible.
-
 
 ## <a id='checklist'></a> Preparation checklist
 
@@ -31,7 +34,9 @@ The following sections tell you how to create new AWS CloudHSMs:
 
 ### <a id='aws-env-prereq'></a> AWS environment prerequisites
 
-<p class="note"><strong>Note:</strong> For high availability (HA), use at least two HSM instances. AWS documentation recommends that you also use a subnet for a publicly available Control Instance, but for this product that is unnecessary. CredHub acts as a Control Instance.</p>
+<p class="note">
+<span class="note__title">Note</span> For high availability (HA), use at least two HSM instances. AWS documentation recommends that you also use a subnet for a publicly available Control Instance, but for this product that is unnecessary. CredHub acts as a Control Instance.
+</p>
 
 Before you create new AWS CloudHSMs, you must have:
 
@@ -154,7 +159,7 @@ To initialize your HSM and set its' policies:
 
 1. Initialize the HSM and create an admin password when you are prompted by running:
 
-    ```
+    ```console
     lunash:> hsm init -label LABEL
 
   Where `LABEL` is the label you want to give the HSM.
@@ -215,7 +220,7 @@ To create an HSM partition to hold the encryption keys:
 
 1. Run:
 
-    ```
+    ```console
     lunash:> partition create -partition PARTITION-NAME -domain CLONING-DOMAIN
     ```
 
@@ -229,9 +234,10 @@ To create an HSM partition to hold the encryption keys:
 
 1. To retrieve the partition serial number, run:
 
-    ```
+    ```console
     lunash:> partition show -partition PARTITION-NAME
     ```
+
     Where `PARTITION-NAME` is the name of the partition you created.
 
 1. Record the `Partition SN` shown in the output of the command you ran in the previous step.
@@ -267,7 +273,7 @@ To establish a network trust link between a client and your HSMs:
 
 1. Copy the client certificate to your HSM by running:
 
-    ```
+    ```console
     scp -i path/to/ssh-key.pem \
       CLIENT-HOSTNAME-OR-IP.pem \
       manager@HSM-IP:CLIENT-HOSTNAME-OR-IP.pem

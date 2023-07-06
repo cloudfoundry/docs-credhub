@@ -94,7 +94,9 @@ Keep an archive of the encryption key values for each CredHub database backup yo
 
 CredHub stores the majority of the stateful data in the configured database. This database is not deployed or managed by CredHub, so backup procedures can differ based on the database provider.
 
-<p class='note'><strong>Note:</strong> After you rotate the encryption key, test, and verify a backup with the latest encryption key. This testing ensures that you are not locked out of your backups in the event of a rollback or other data loss.</p>
+<p> After you rotate the encryption key, test, verify a backup with the latest
+encryption key. This testing ensures that you are not locked out of your backups in the event of a rollback or other data
+loss.</p>
 
 For more information about database backups, see [Chapter 7 Backup and Recovery](http://dev.mysql.com/doc/refman/5.7/en/backup-and-recovery.html) in the MySQL documentation and [Chapter 24. Backup and Restore](https://www.postgresql.org/docs/9.5/static/backup.html) in the PostgreSQL documentation.
 
@@ -103,7 +105,8 @@ For more information about database backups, see [Chapter 7 Backup and Recovery]
 Database best practices dictate that you do backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
 
 <% else %>
-In <%= vars.app_runtime_full %>, you can back up CredHub and the data with BOSH Backup and Restore (BBR). For more information, see <em>Backing Up and Restoring Deployments</em> in the CredHub documentation.
+In <%= vars.app_runtime_full %>, you can back up CredHub and the data with BOSH Backup and Restore (BBR).
+For more information, see <em>Backing Up and Restoring Deployments</em> in the CredHub documentation.
 
 Ensure you also back up your encryption key. If you do not back up your encryption key, you cannot restore your BBR backups. For more information, see [Backing up the encryption keys](#encryption-keys).
 <% end %>
