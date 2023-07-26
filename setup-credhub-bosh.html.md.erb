@@ -1,31 +1,34 @@
 ---
-title: Setting Up and Deploying CredHub with BOSH
+title: Setting up and deploying CredHub with BOSH
 owner: CredHub
 ---
 
 <% if vars.platform_code == 'CF' %>
 <div class="quick-links">
     <ul>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#setup">Setup Before Deployment</a></li>
-        <li><a href="#configure">Configuring the Director</a></li>
+        <li><a href="#setup">Preparing for deployment</a></li>
+        <li><a href="#configure">Configuring the BOSH Director</a></li>
         <li><a href="#using-credhub">Using CredHub</a></li>
     </ul>
 </div>
 
-This topic provides information about how to deploy a BOSH Director with CredHub so that you can use credential variables in your deployment manifests.
+You can deploy a BOSH Director with CredHub so that you can use credential variables in your
+deployment manifests.
 
-If you use the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment) repository on GitHub, include the file `credhub.yml` to enable CredHub on the BOSH Director VM.
+If you use the [bosh-deployment](https://github.com/cloudfoundry/bosh-deployment) repository on
+GitHub, include the `credhub.yml` file to enable CredHub on the BOSH Director VM.
+
+CredHub exists on a virtual machine (VM) with the BOSH Director, UAA, and other high level components.
+A deployment manifest configured with variables calls to CredHub which passes the credential to the
+appropriate components.
+
+Once configured, any variable in a BOSH deployment manifest with the syntax `((variable-name))` causes
+the BOSH Director to retrieve the variable value from CredHub at deployment time. You can tell your
+manifest already uses CredHub if the fields with secure data have `((variables))` formatted with
+double parentheses.
 
 
-## <a name="how-it-works"></a> How It Works
-
-CredHub exists co-located on a virtual machine (VM) with the BOSH Director, UAA, and other high-level components. A deployment manifest configured with variables calls to CredHub which then passes the credential to the appropriate components.
-
-Once configured, any variable in a BOSH deployment manifest with the syntax `((variable-name))` causes the BOSH Director to retrieve the variable value from CredHub at deploy time. You can tell your manifest already uses CredHub if fields with secure data have `((variables))` formatted with double parentheses.
-
-
-## <a name="setup"></a> Prepare for Deployment
+## <a name="setup"></a> Preparing for deployment
 
 To prepare to deploy a BOSH Director with CredHub:
 
@@ -33,17 +36,17 @@ To prepare to deploy a BOSH Director with CredHub:
 The following configuration steps assume that you have an existing BOSH Director. If you do not have a BOSH Director, see [Deploying BOSH with create-env](https://bosh.io/docs/init.html) in the BOSH documentation.
 
 1. Configure UAA on your Director.<br/><br>
-CredHub uses UAA for user and client authentication. You need a UAA server configured on the BOSH Director to enable CredHub. For more information about provisioning UAA on the BOSH Director, see [Configuring Director](https://bosh.io/docs/director-users-uaa.html) in the BOSH documentation.
+CredHub uses UAA for user and client authentication. You need a UAA server that is configured on the BOSH Director to enable CredHub. For more information about provisioning UAA on the BOSH Director, see [Configuring Director](https://bosh.io/docs/director-users-uaa.html) in the BOSH documentation.
 
 1. (Optional) Configure an external database.<br/><br>
-To optimize fault tolerance, store CredHub data in an external database. To do so, you must create a database and user on your database server before deployment. You can use the internal BOSH Director database to store CredHub data, but take care to avoid data loss when you provision or update the BOSH Director VM.
+To optimize fault tolerance, store CredHub data in an external database. To accomplish this, you must create a database and user on your database server before deployment. You can use the internal BOSH Director database to store CredHub data, but be careful to avoid data loss when you provision or update the BOSH Director VM.
 
 1. (Optional) Configure a Luna HSM.<br/><br>
 If you use an external Hardware Security Module (HSM) to perform cryptographic operations:
-    * Configure the HSM to allow access from the deployed CredHub instance, and
+    * Configure the HSM to allow access from the deployed CredHub instance.
     * Grant the operator all of the required permissions to use the HSM.
     <br><br>
-    For more information about the required HSM values and how to configure an HSM, see [Using Hardware Security Modules with CredHub](./hsm-config.html).
+    For more information about the required HSM values and how to configure an HSM, see [Using hardware security modules with CredHub](./hsm-config.html).
 
 
 ## <a name="configure"></a> Configuring the BOSH Director
@@ -88,7 +91,7 @@ To configure your BOSH Director with CredHub:
      ```
 
 1. (Optional) Add variable generation specifications for CredHub properties.<br/><br>
-You can generate values that CredHub requires automatically with the BOSH CLI. To enable generation, add the variable specifications to the manifest, as in the example below. You can adjust or remove these if you prefer to provide your own values.
+You can generate values that CredHub requires automatically with the BOSH CLI. To enable generation, add the variable specifications to the manifest, as in the following example. You can adjust or remove these if you prefer to provide your own values.
 
     ```
         variables:
@@ -109,7 +112,7 @@ You can generate values that CredHub requires automatically with the BOSH CLI. T
           type: password
     ```
 
-1. Add CredHub properties to the deployment manifest, as in the example below. This example includes a configuration to use a hardware security module (HSM) for encryption.
+1. Add CredHub properties to the deployment manifest, as in the following example. This example includes a configuration to use a hardware security module (HSM) for encryption.
 
     ```
     properties:
@@ -287,7 +290,7 @@ You can generate values that CredHub requires automatically with the BOSH CLI. T
 
 To use CredHub:
 
-1. Create CredHub users in UAA. To authenticate with CredHub to manage credentials, you must have a UAA user account with the scopes `credhub.read` and `credhub.write`. To create users in UAA, see [Creating and Managing Users with the UAA CLI (UAAC)](../uaa/uaa-user-management.html). Alternatively, you can configure UAA with an external LDAP provider. For more information, see [User Account and Authentication LDAP Integration](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-LDAP.md) in the CloudFoundry User Account and Authentication (UAA) Server repository on GitHub.
+1. Create CredHub users in UAA. To authenticate with CredHub to manage credentials, you must have a UAA user account with the scopes `credhub.read` and `credhub.write`. To create users in UAA, see [Creating and managing users with the UAA CLI ](../uaa/uaa-user-management.html). Alternatively, you can configure UAA with an external LDAP provider. For more information, see [User Account and Authentication LDAP Integration](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-LDAP.md) in the CloudFoundry User Account and Authentication (UAA) Server repository on GitHub.
 
 1. Install the CredHub CLI to manage stored credentials. Download the CredHub CLI from the [Releases](https://github.com/cloudfoundry-incubator/credhub-cli/releases) page in the CredHub CLI repository on GitHub.
 
@@ -319,7 +322,7 @@ To use CredHub:
         credhub generate --type ssh --name /generated/ssh_key
         ```
 
-1. Update your BOSH deployment manifests. Once you have a BOSH Director that integrates with CredHub, you can update your deployment manifests to use it. The example below is of a deployment manifest using two credentials: one stored in CredHub, and one generated by CredHub. Define credentials that you want to be generated automatically in the `variables` section.
+1. Update your BOSH deployment manifests. Once you have a BOSH Director that integrates with CredHub, you can update your deployment manifests to use it. The following example is a deployment manifest using two credentials: one stored in CredHub, and one that is generated by CredHub. You can define credentials that you want to be generated automatically in the `variables` section.
 
     ```
     name: Sample-Manifest
@@ -354,6 +357,6 @@ To use CredHub:
 
 <% else %>
 
-<%= vars.bosh_credhub_setup %>
+The BOSH Director and VMware Tanzu Application Service for VMs (TAS for VMs) tiles deploy CredHub instances as part of the installation process. For more information, see [Installing Ops Manager](https://docs.vmware.com/en/VMware-Tanzu-Operations-Manager/3.0/vmware-tanzu-ops-manager/install-index.html).
 
 <% end %>
