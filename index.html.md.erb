@@ -32,8 +32,7 @@ CredHub consists of a REST API and a CLI. CredHub is an OAuth2
 resource server that integrates with User Account Authentication (UAA) to provide core authentication and federation
 capabilities.
 
-![alt-text="The CredHub CLI interacts with CredHub to export
-credentials to the Encryption Provider, Data Store, and Authentication Provider"](./images/basic-architecture.png)
+![alt-text="The CredHub CLI interacts with CredHub to export credentials to the Encryption Provider, Data Store, and Authentication Provider"](./images/basic-architecture.png)
 
 <% if vars.platform_code == 'CF' %>
 <%= partial './oss_credhub' %>
@@ -73,7 +72,7 @@ With CredHub as a service, the load balancer and external databases communicate 
 
 ## <a id='store-creds'></a> Using CredHub to store credentials for service tiles
 
-If you develop a service tile for <%= vars.platform_name %> and want to store its credentials in BOSH CredHub, see [CredHub](https://docs.pivotal.io/tiledev/credhub.html) in _<%= vars.platform_name %> Tile Developer Guide_.
+If you develop a service tile for <%= vars.platform_name %> and want to store its credentials in BOSH CredHub, see [CredHub](https://docs.vmware.com/en/Tile-Developer-Guide/3.0/tile-dev-guide/credhub.html) in _<%= vars.platform_name %> Tile Developer Guide_.
 <% end %>
 
 
