@@ -260,8 +260,7 @@ You can generate values that CredHub requires automatically with the BOSH CLI. T
     ```
     Where `POSTGRES-PASSWORD` is the password for your Postgres server.
 
-1. (Optional) Seed initial CredHub users to UAA.
-    <p class='note'><strong>Note:</strong> Users must have both <code>credhub.read</code> and <code>credhub.write access</code> scopes.</p>
+2. (Optional) Seed initial CredHub users to UAA. Users must have both `credhub.read` and `credhub.write access` scopes.
 
     ```
     properties:
@@ -283,7 +282,7 @@ You can generate values that CredHub requires automatically with the BOSH CLI. T
     * `CREDHUB-USER` and `OTHER-CREDHUB-USER` are the CredHub users you want to seed to UAA.
     * `CREDHUB-PASSWORD` and `OTHER-CREDHUB-PASSWORD` are the passwords for the CredHub users you want to seed to UAA.
 
-1. Deploy the BOSH Director. For more information, see [Deploying](https://bosh.io/docs/deploying/) in the BOSH documentation.
+3. Deploy the BOSH Director. For more information, see [Deploying](https://bosh.io/docs/deploying/) in the BOSH documentation.
 
 
 ## <a name="using-credhub"></a> Using CredHub
