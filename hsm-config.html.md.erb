@@ -6,7 +6,8 @@ owner: CredHub
 You can configure [AWS CloudHSM](https://aws.amazon.com/cloudhsm) devices to work with CredHub.
 
 <p class="note important">
-<span class="note__title">Important</span> If you use a <a href="https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/safenet-network-hsm/">Luna SafeNet HSM</a>,
+<span class="note__title"><strong>Important</strong></span>
+If you use a <a href="https://safenet.gemalto.com/data-encryption/hardware-security-modules-hsms/safenet-network-hsm/">Luna SafeNet HSM</a>,
 rather than AWS, skip over the device allocation portion of the documentation, and start with
 <a href="#initialize-and-configure">Initialize and Configure New HSMs</a>.
 </p>
@@ -35,7 +36,8 @@ The following sections tell you how to create new AWS CloudHSMs:
 ### <a id='aws-env-prereq'></a> AWS environment prerequisites
 
 <p class="note">
-<span class="note__title">Note</span> For high availability (HA), use at least two HSM instances. AWS documentation recommends that you also use a subnet for a publicly available Control Instance, but for this product that is unnecessary. CredHub acts as a Control Instance.
+<span class="note__title"><strong>Note</strong></span>
+For high availability (HA), use at least two HSM instances. AWS documentation recommends that you also use a subnet for a publicly available Control Instance, but for this product that is unnecessary. CredHub acts as a Control Instance.
 </p>
 
 Before you create new AWS CloudHSMs, you must have:
@@ -436,7 +438,7 @@ To rotate or renew this certificate at any time:
     Where `CLIENT-NAME` is the name of the client.
     
     <p class="note important">
-    <span class="note__title">Important</span>
+    <span class="note__title"><strong>Important</strong></span>
     When you remove the existing client, all partition assignments are deleted.</p>
 
 1. Register the client again by running:
