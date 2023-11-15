@@ -10,11 +10,11 @@ You can resolve errors that might occur when you deploy, upgrade, or interact wi
 CredHub deployment failures include:
 
 * Configuration errors
-* Pre start errors
-* Post start errors
+* Pre-start errors
+* Post-start errors
 
 For additional information about troubleshooting CredHub deployment failures,
-see [Error List](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list) in _Troubleshooting Guide_ in the CredHub repository on GitHub.
+see [Error list](https://github.com/pivotal-cf/credhub-release/blob/master/docs/troubleshooting-guide.md#error-list) in _Troubleshooting Guide_ in the CredHub repository on GitHub.
 
 ### <a id="config"></a> Configuration errors
 
@@ -94,9 +94,9 @@ Exit code 1
 
 When you are troubleshooting this error, use the line number and the template specified in the error message to identify the missing or invalid value.
 
-### <a id="pre-start"></a> Pre Start errors
+### <a id="pre-start"></a> Pre-start errors
 
-Pre start errors occur when CredHub is unable to perform pre start tasks. For example:
+Pre-start errors occur when CredHub is unable to perform pre-start tasks. For example:
 
 <pre class="terminal">
 Task 789
@@ -122,13 +122,13 @@ Exit code 1
 
 #### <a name="logs"></a> Accessing logs
 
-CredHub stores pre start logs in the `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log` files.
+CredHub stores pre-start logs in the `/var/vcap/sys/log/credhub/pre-start.stderr.log` and `pre-start.stdout.log` files.
 
-To access these logs when you are troubleshooting a pre start error, you must SSH into the CredHub VM or SCP the logs from it.
+To access these logs when you are troubleshooting a pre-start error, you must SSH into the CredHub VM or SCP the logs from it.
 
-### <a id="post-start"></a> Post Start errors
+### <a id="post-start"></a> Post-start errors
 
-Post start errors occur when a post start script fails. For example:
+Post-start errors occur when a post-start script fails. For example:
 
 <pre class="terminal">
 Task 478
@@ -156,7 +156,7 @@ Exit code 1
 
 The CredHub log is stored in the `/var/vcap/sys/log/credhub/credhub.log` file.
 
-To access these logs when you are troubleshooting a post start error, you must SSH into the CredHub VM or SCP the logs
+To access these logs when you are troubleshooting a post-start error, you must SSH into the CredHub VM or SCP the logs
 from it.
 
 <p> The CredHub log is written according to the  <code>log_level</code> variable,
