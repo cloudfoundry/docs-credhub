@@ -13,7 +13,7 @@ This configuration does not provide high availability.
 
 When you use a colocated deployment architecture, the BOSH Director, CredHub, UAA, and the BOSH Director database are all installed on a single BOSH VM, as shown in this diagram:
 
-![alt-text="The components colocated on the BOSH VM: BOSH Director, CredHub, UAA, and the BOSH Director database"](./images/bosh-deployment.png)
+![The components colocated on the BOSH VM: BOSH Director, CredHub, UAA, and the BOSH Director database](./images/bosh-deployment.png)
 
 For more information, see [Setting up and deploying CredHub with BOSH](setup-credhub-bosh.html).
 
@@ -27,5 +27,5 @@ database cluster and encryption provider.
 When you deploy CredHub as a service, the load balancer and external databases communicate
 directly with the CredHub VMs, as shown in this diagram:
 
-![alt-text="Mltiple CredHub VMs that connect to UAA, an HSM, an external database, and a load balancer. The load balancer connects to four consumer VMs."](./images/service-deployment.png)
+![Multiple CredHub VMs that connect to UAA, an HSM, an external database, and a load balancer. The load balancer connects to four consumer VMs.](./images/service-deployment.png)
 
