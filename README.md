@@ -1,6 +1,6 @@
 # docs-credhub
 
-This repo is a part of both the open source Cloud Foundry docs and the commercial Tanzu Application Service docs.
+This repo is a part of both the open source Cloud Foundry docs and the commercial Tanzu Platform for Cloud Foundry docs.
 
 The contents here are structured as a topic repository intended to be
 compiled into a larger document with
