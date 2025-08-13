@@ -4,13 +4,6 @@ owner: CredHub
 ---
 
 <% if vars.platform_code == 'CF' %>
-<div class="quick-links">
-    <ul>
-        <li><a href="#setup">Preparing for deployment</a></li>
-        <li><a href="#configure">Configuring the BOSH Director</a></li>
-        <li><a href="#using-credhub">Using CredHub</a></li>
-    </ul>
-</div>
 
 You can deploy a BOSH Director with CredHub so that you can use credential variables in your
 deployment manifests.
@@ -289,7 +282,7 @@ You can generate values that CredHub requires automatically with the BOSH CLI. T
 
 To use CredHub:
 
-1. Create CredHub users in UAA. To authenticate with CredHub to manage credentials, you must have a UAA user account with the scopes `credhub.read` and `credhub.write`. To create users in UAA, see [Creating and managing users with the UAA CLI ](../uaa/uaa-user-management.html). Alternatively, you can configure UAA with an external LDAP provider. For more information, see [User Account and Authentication LDAP Integration](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-LDAP.md) in the CloudFoundry User Account and Authentication (UAA) Server repository on GitHub.
+1. Create CredHub users in UAA. To authenticate with CredHub to manage credentials, you must have a UAA user account with the scopes `credhub.read` and `credhub.write`. To create users in UAA, see [Creating and managing users with the UAA CLI ](../operating/t-uaa/uaa-user-management.html). Alternatively, you can configure UAA with an external LDAP provider. For more information, see [User Account and Authentication LDAP Integration](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-LDAP.md) in the CloudFoundry User Account and Authentication (UAA) Server repository on GitHub.
 
 1. Install the CredHub CLI to manage stored credentials. Download the CredHub CLI from the [Releases](https://github.com/cloudfoundry-incubator/credhub-cli/releases) page in the CredHub CLI repository on GitHub.
 
@@ -356,6 +349,6 @@ To use CredHub:
 
 <% else %>
 
-The BOSH Director and VMware Tanzu Platform for Cloud Foundry tiles deploy CredHub instances as part of the installation process. For more information, see [Installing <%= vars.platform_name %>](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-operations-manager/3-0/tanzu-ops-manager/install-index.html).
+The BOSH Director and VMware Tanzu Platform for Cloud Foundry tiles deploy CredHub instances as part of the installation process. For more information, see [Installing <%= vars.platform_name %>](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-operations-manager/3-1/tanzu-ops-manager/install-index.html).
 
 <% end %>
