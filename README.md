@@ -1,10 +1,27 @@
 # docs-credhub
 
-This repo is a part of both the open source Cloud Foundry docs and the commercial Tanzu Elastic Application Runtime docs.
+This repository contains documentation for CredHub, a component for securely storing and accessing credentials in Cloud Foundry.
 
+This is a content repository in the [Cloud Foundry documentation set](https://github.com/cloudfoundry/docs-book-cloudfoundry).
 
-See the [docs-book-cloudfoundry](http://github.com/cloudfoundry/docs-book-cloudfoundry)
-repo for the complete list of open source documentation repositories, as well as
-information about the publishing process.
+## Published location
 
-The Elastic Application Runtime docs the [docs-book-application-service](https://github.gwd.broadcom.net/TNZ/docs-book-application-service) repo to organize the TOC and index files.
+This content is published at https://docs.cloudfoundry.org/credhub/.
+
+## Branch
+
+This repository uses only the `master` branch for the Cloud Foundry OSS documentation.
+
+## Template variables
+
+Template variables for this content are defined in the `docs-book-cloudfoundry` repository at [`config/template_variables.yml`](https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml). Update that file to change variables that appear across this content.
+
+## Contributing
+
+1. Fork this repository.
+2. Create a branch from `master`, make your changes, and submit a pull request to `master`.
+
+Only the CFF Docs WG lead can merge pull requests, build to staging, and publish the documentation.
+
+* **Staging site:** https://docs-staging.cloudfoundry.org/
+* **Published site:** https://docs.cloudfoundry.org/
