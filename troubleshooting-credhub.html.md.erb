@@ -159,8 +159,8 @@ The CredHub log is stored in the `/var/vcap/sys/log/credhub/credhub.log` file.
 To access these logs when you are troubleshooting a post-start error, you must SSH into the CredHub VM or SCP the logs
 from it.
 
-<p> The CredHub log is written according to the  <code>log_level</code> variable,
-specified in your manifest.</p>
+The CredHub log is written according to the `log_level` variable,
+specified in your manifest.
 
 To locate the cause of the failure, search for `ERROR` in the logs. Because Monit attempts to restart a failing CredHub process, you might see multiple instances of the same error.
 

@@ -49,7 +49,7 @@ A <%= vars.platform_name %> deployment stores credentials in the following locat
 
 In <%= vars.platform_name %>, the BOSH Director VM includes a CredHub job. This provides a lightweight credential storage instance for the BOSH Director. The BOSH Director, <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>), and other tiles store credentials in BOSH CredHub. For more information, see _Retrieve Credentials Stored in BOSH CredHub_ in _Retrieving Credentials from Your Deployment_.
 
-<p> This configuration does not provide high availability.</p>
+This configuration does not provide high availability.
 
 In this colocated deployment architecture, the BOSH Director, CredHub, UAA, and the BOSH Director database are all
 installed on a single BOSH VM, as shown in the following diagram:
