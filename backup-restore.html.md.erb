@@ -36,7 +36,7 @@ The components that you can back up are:
 * The database you configured for CredHub. For more information, see [Backing up the database](#database).
 
 
-## <a name="deployment-manifest"></a> Backing up the Deployment Manifest file
+## <a id="deployment-manifest"></a> Backing up the Deployment Manifest file
 
 Yopu can Back up the CredHub deployment manifest file every time you revise it.
 You might want to keep the backups in a revision control system so you can manage them automatically.
@@ -53,18 +53,18 @@ Where:
 * `MANIFEST` is the filename of your CredHub deployment manifest.
 
 
-## <a name="encryption-keys"></a> Backing up the encryption keys
+## <a id="encryption-keys"></a> Backing up the encryption keys
 
 The process for backing up CredHub encryption keys can differ based on the encryption provider you use.
 CredHub supports internal providers and Luna HSM.
 
-### <a name="internal"></a> Internal provider
+### <a id="internal"></a> Internal provider
 
 The internal provider performs encryption and decryption operations using a symmetrical AES key. This key is a hexadecimal value that is provided to the app during deployment.
 
 Store the key in a secure place so you can use it in a future recovery deployment.
 
-### <a name="luna-hsm"></a> Luna Hardware Security Modules
+### <a id="luna-hsm"></a> Luna Hardware Security Modules
 
 Luna Hardware Security Modules (HSMs) do not support traditional data export. HSMs are designed not to release key material once it's placed on the device.
 
@@ -84,13 +84,13 @@ CredHub supports management and integration with a high availability (HA) Luna H
 
 If you use a Luna HSM from Amazon Web Services (AWS), see [What Is AWS CloudHSM?](http://docs.aws.amazon.com/cloudhsm/latest/userguide/configuring-ha.html) in the AWS documentation.
 
-### <a name="encryption-frequency"></a> Encryption key back up frequency
+### <a id="encryption-frequency"></a> Encryption key back up frequency
 
 Back up the encryption keys whenever you rotate them to ensure that you always have access to the latest value.
 
 Keep an archive of the encryption key values for each CredHub database backup you make. For example, if you maintain backups of the five most recent versions of your CredHub database, also save the five most recent encryption keys so you can access each backup.
 
-## <a name="database"></a> Backing up the database
+## <a id="database"></a> Backing up the database
 
 CredHub stores the majority of the stateful data in the configured database. This database is not deployed or managed by CredHub, so backup procedures can differ based on the database provider.
 
@@ -100,7 +100,7 @@ loss.
 
 For more information about database backups, see [Chapter 7 Backup and Recovery](http://dev.mysql.com/doc/refman/5.7/en/backup-and-recovery.html) in the MySQL documentation and [Chapter 24. Backup and Restore](https://www.postgresql.org/docs/9.5/static/backup.html) in the PostgreSQL documentation.
 
-### <a name="db-frequency"></a> Database backup frequency
+### <a id="db-frequency"></a> Database backup frequency
 
 Database best practices dictate that you do backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
 
