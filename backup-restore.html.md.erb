@@ -3,7 +3,6 @@ title: Backing Up and Restoring CredHub Instances
 owner: CredHub
 ---
 
-<% if vars.platform_code == 'CF' %>
 <div class="quick-links">
     <ul>
         <li><a href="#deployment-manifest">Backing up the deployment manifest file</a></li>
@@ -103,10 +102,3 @@ For more information about database backups, see [Chapter 7 Backup and Recovery]
 ### <a id="db-frequency"></a> Database backup frequency
 
 Database best practices dictate that you do backups regularly, to avoid losing data if your database cluster fails. The right frequency varies based on the needs of your deployment.
-
-<% else %>
-In <%= vars.app_runtime_full %>, you can back up CredHub and the data with BOSH Backup and Restore (BBR).
-For more information, see <em>Backing Up and Restoring Deployments</em> in the CredHub documentation.
-
-Ensure you also back up your encryption key. If you do not back up your encryption key, you cannot restore your BBR backups. For more information, see [Backing up the encryption keys](#encryption-keys).
-<% end %>
