@@ -66,8 +66,6 @@ CredHub BOSH manifest.
 For an example of a BOSH release of a CredHub KMS plug-in with a defined socket, see
 the [sample-credhub-kms-plugin-release](https://github.com/pivotal/sample-credhub-kms-plugin-release) repository on GitHub.
 
-<% if vars.platform_code == 'CF' %>
-
 ## <a id='deploy-credhub-with-plugin'></a> Deploying CredHub with your plug-in release
 
 To deploy CredHub with your plug-in, you must modify the CredHub BOSH manifest to include the new
@@ -136,9 +134,3 @@ To deploy CredHub with your plug-in:
     Where:
     * `DEPLOYMENT-NAME` is the name of your CredHub BOSH deployment.
     * `OPS-FILE` is the name of your ops file.
-
-<% else %>
-
-<%= partial "/pcf/core/credhub-plugin" %>
-
-<% end %>
